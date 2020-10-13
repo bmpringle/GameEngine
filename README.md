@@ -1,1 +1,1 @@
-Game
+This code depends on GLFW 3.3.2 and GLEW. GLEW is likely already on your system, but you will need to compile GLFW 3.3.2 from the source yourself. The root folder for GLFW should be put inside of the root folder for this repo.
