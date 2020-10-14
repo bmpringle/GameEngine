@@ -1,0 +1,12 @@
+-1 -2 blcorner.jpg
+-1 -1 lwall.jpg
+-1 0 lwall.jpg 
+-1 1 lwall.jpg
+-1 2 tlcorner.jpg
+0 2 twall.jpg
+1 2 trcorner.jpg
+1 1 rwall.jpg
+1 0 rwall.jpg
+1 -1 rwall.jpg
+1 -2 brcorner.jpg
+0 -2 bwall.jpg

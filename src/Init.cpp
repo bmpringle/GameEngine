@@ -102,16 +102,85 @@ int shaderInit() {
     return shaderProgram;
 }
 
+int texShaderInit() {
+
+    const char *vertexShaderSource = 
+    "#version 420 core\n"
+    "layout (location = 0) in vec3 aPos;\n"
+    "layout (location = 1) in vec4 aColor;\n"
+    "layout (location = 2) in vec2 uv;\n"
+    "layout (location = 0) out vec4 outColor;\n"
+    "layout (location = 1) out vec2 outUV;\n"
+    "void main()\n"
+    "{\n"
+    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "   outColor = aColor;\n"
+    "   outUV = uv;\n"
+    "}\0";
+    const char *fragmentShaderSource = 
+    "#version 420 core\n"
+    "layout (location = 0) in vec4 outColor;\n"
+    "layout (location = 1) in vec2 outUV;\n"
+    "out vec4 FragColor;\n"
+    "uniform sampler2D ourTexture;\n"
+    "void main()\n"
+    "{\n"
+    "   vec2 uv = vec2(outUV.x, -outUV.y);\n"
+    "   FragColor = texture(ourTexture, uv);\n"
+    "}\n\0";
+
+    // build and compile our shader program
+    // ------------------------------------
+    // vertex shader
+    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+    // check for shader compile errors
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    // fragment shader
+    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+    // check for shader compile errors
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    // link shaders
+    int shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    // check for linking errors
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+    }
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+    return shaderProgram;
+}
 
 std::vector<unsigned int> allocateVAO() {
 
-        unsigned int VAO, VBOV, VBOC;
+        unsigned int VAO, VBOV, VBOC, VBOT;
 
         float empty[] = {};
 
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBOV);
         glGenBuffers(1, &VBOC);
+        glGenBuffers(1, &VBOT);
         // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
         glBindVertexArray(VAO);
 
@@ -135,15 +204,25 @@ std::vector<unsigned int> allocateVAO() {
         // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
         glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
+        glBindBuffer(GL_ARRAY_BUFFER, VBOT);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(empty), empty, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+        
+        glEnableVertexAttribArray(2);
+
+        // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+        glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
         // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
         // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
         glBindVertexArray(0);
-
+    
         std::vector<unsigned int> array = std::vector<unsigned int>();
         array.push_back(VAO);
         array.push_back(VBOV);
         array.push_back(VBOC);
+        array.push_back(VBOT);
 
         return array;
 }

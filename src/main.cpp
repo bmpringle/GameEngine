@@ -3,6 +3,7 @@
 #include<iostream>
 #include"Init.h"
 #include"World.h"
+#include<png.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -13,8 +14,8 @@ void processInput(GLFWwindow *window) {
         glfwSetWindowShouldClose(window, true);
 }
 
-int main(int argc, char** argv) {
-    
+int main(int argc, char** argv) {   
+
     _glfwInit();
 
     GLFWwindow* window = createWindow(framebuffer_size_callback);
@@ -28,13 +29,10 @@ int main(int argc, char** argv) {
     glViewport(0, 0, 800, 600);
 
     int program = shaderInit();
+    int texprogram = texShaderInit();
 
     World w = World();
-    w.addTile(Tile(0, 0));
-    w.addTile(Tile(1, 0));
-    w.addTile(Tile(2, 0));
-    w.addTile(Tile(-1, 0));
-    w.addTile(Tile(-2, 0));
+    w.parseWorld("world.txt");
 
     while(!glfwWindowShouldClose(window)) {
         processInput(window);
@@ -43,10 +41,7 @@ int main(int argc, char** argv) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        w.renderTiles(program);
-
-        glUseProgram(program); 
-
+        w.renderTiles(program, texprogram);
 
         glfwPollEvents();    
     }
