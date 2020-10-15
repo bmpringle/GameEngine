@@ -13,9 +13,11 @@ env = Environment(CC='g++')
 if env['PLATFORM'] == 'darwin': #macos
     GLFW_DIR='/usr/local/Cellar/glfw/3.3.2'
     GLEW_DIR='/usr/local/Cellar/glew/2.2.0'
+    LINK='g++ -framework OpenGL -framework GLUT'
 elif env['PLATFORM'] == 'posix': #linux
     GLFW_DIR='/home/bmp/Development/C++/Game/glfw-3.3.2'
     GLEW_DIR='/usr/'
+    LINK='g++'
 else:
     print("Error, unsupported platform->", env['PLATFORM'])
     exit()
@@ -35,7 +37,7 @@ VariantDir(os.sep.join(['obj', BLD]), "src", duplicate=0)
 tst = env.Program(os.sep.join(['bin', BLD, 'tstGame']),
                     source=Glob(os.sep.join(['obj', BLD, '*.cpp'])),
                     CCFLAGS=CCFLAGS,
-                    LINK='g++ -framework OpenGL -framework GLUT',
+                    LINK=LINK,
                     LIBPATH=[GLFW_LIB,GLEW_LIB],
                     LIBS=['GLEW','GLFW','pthread'])
 
