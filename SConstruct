@@ -15,7 +15,7 @@ if env['PLATFORM'] == 'darwin': #macos
     GLEW_DIR='/usr/local/Cellar/glew/2.2.0'
     LINK='g++ -framework OpenGL -framework GLUT'
 elif env['PLATFORM'] == 'posix': #linux
-    GLFW_DIR='/home/bmp/Development/C++/Game/glfw-3.3.2'
+    GLFW_DIR='/usr/local' # must 'make install' GLFW 
     GLEW_DIR='/usr/'
     LINK='g++'
 else:
