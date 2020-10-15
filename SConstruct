@@ -6,10 +6,24 @@
 #install the following libraries with brew:
 #   brew install glfw
 #   brew install glew
-GLFW_INCLUDE='/usr/local/Cellar/glfw/3.3.2/include'
-GLEW_INCLUDE='/usr/local/Cellar/glew/2.2.0/include'
-
 import os
+
+env = Environment(CC='g++')
+
+if env['PLATFORM'] == 'darwin': #macos
+    GLFW_DIR='/usr/local/Cellar/glfw/3.3.2'
+    GLEW_DIR='/usr/local/Cellar/glew/2.2.0'
+elif env['PLATFORM'] == 'linux': #linux
+    GLFW_DIR='/home/bmp/Development/C++/Game/glfw-3.3.2'
+    GLEW_DIR='/usr/'
+else:
+    print("Error, unsupported platform->", env['PLATFORM'])
+    exit()
+
+GLFW_INCLUDE=os.sep.join([GLFW_DIR,'include'])
+GLEW_INCLUDE=os.sep.join([GLEW_DIR,'include'])
+GLFW_LIB=os.sep.join([GLFW_DIR,'lib'])
+GLEW_LIB=os.sep.join([GLEW_DIR,'lib'])
 
 DBG = int(ARGUMENTS.get('DBG', 0))
 BLD = 'dbg' if DBG == 1 else 'rel'
@@ -17,12 +31,12 @@ OPT = 0 if DBG == 1 else 3
 
 CCFLAGS='-O{} -I {} -I {} -g -std=c++2a'.format(OPT, GLFW_INCLUDE, GLEW_INCLUDE)
 
-env = Environment(CC='g++', CCFLAGS=CCFLAGS)
 VariantDir(os.sep.join(['obj', BLD]), "src", duplicate=0)
 tst = env.Program(os.sep.join(['bin', BLD, 'tstGame']),
-                    source=Glob(os.sep.join(['obj', BLD, '*.cpp'])), 
-                    LINK='g++ -framework OpenGL -framework GLUT', 
-                    LIBPATH=['/usr/local/Cellar/glew/2.2.0/lib/','/usr/local/Cellar/glfw/3.3.2/lib/'], 
+                    source=Glob(os.sep.join(['obj', BLD, '*.cpp'])),
+                    CCFLAGS=CCFLAGS,
+                    LINK='g++ -framework OpenGL -framework GLUT',
+                    LIBPATH=[GLFW_LIB,GLEW_LIB],
                     LIBS=['GLEW','GLFW','pthread'])
 
 Default(tst)
