@@ -1,15 +1,15 @@
--1 -2 blcorner.png
--1 -1 lwall.png
--1 0 lwall.png 
--1 1 lwall.png
--1 2 tlcorner.png
-0 2 twall.png
-1 2 trcorner.png
-1 1 rwall.png
-1 0 rwall.png
-1 -1 rwall.png
-1 -2 brcorner.png
-0 -2 bwall.png
+blcorner -1 -2
+lwall -1 -1
+lwall -1 0
+lwall -1 1
+tlcorner -1 2
+twall 0 2
+trcorner 1 2
+rwall 1 1
+rwall 1 0
+rwall 1 -1
+brcorner 1 -2
+bwall 0 -2
 0 1
 0 0
 0 -1
