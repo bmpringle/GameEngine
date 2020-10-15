@@ -13,7 +13,7 @@ env = Environment(CC='g++')
 if env['PLATFORM'] == 'darwin': #macos
     GLFW_DIR='/usr/local/Cellar/glfw/3.3.2'
     GLEW_DIR='/usr/local/Cellar/glew/2.2.0'
-elif env['PLATFORM'] == 'linux': #linux
+elif env['PLATFORM'] == 'posix': #linux
     GLFW_DIR='/home/bmp/Development/C++/Game/glfw-3.3.2'
     GLEW_DIR='/usr/'
 else:
