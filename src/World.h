@@ -18,7 +18,7 @@ class World {
         void renderTiles(int program, int texprogram);
     private:
         std::vector<Tile> tiles = std::vector<Tile>();
-        float unitToNormal = 1.0/10.0;
+        float unitToNormal = 1.0/5.0;
 
 };
 #endif
