@@ -1,6 +1,8 @@
 #include"Tile.h"
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image.h"
+#include "stb_image_write.h"
 
 Tile::Tile(float _x, float _y) {
     x = _x;
@@ -79,7 +81,8 @@ void Tile::loadTexture(std::string asset) {
 
     int width, height, nrChannels;
     unsigned char *data = stbi_load(("src/assets/"+asset).c_str(), &width, &height, &nrChannels, 0); 
-
+    //stbi_write_png(("src/assets/"+asset).c_str(), width, height, nrChannels, data, width*nrChannels);
+    
     if(data  == nullptr) abort();
 
     glBindVertexArray(VAO);
