@@ -105,12 +105,12 @@ int shaderInit() {
 int texShaderInit() {
 
     const char *vertexShaderSource = 
-    "#version 420 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "layout (location = 1) in vec4 aColor;\n"
-    "layout (location = 2) in vec2 uv;\n"
-    "layout (location = 0) out vec4 outColor;\n"
-    "layout (location = 1) out vec2 outUV;\n"
+    "#version 330 core\n"
+    "in vec3 aPos;\n"
+    "in vec4 aColor;\n"
+    "in vec2 uv;\n"
+    "out vec4 outColor;\n"
+    "out vec2 outUV;\n"
     "void main()\n"
     "{\n"
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
@@ -118,9 +118,9 @@ int texShaderInit() {
     "   outUV = uv;\n"
     "}\0";
     const char *fragmentShaderSource = 
-    "#version 420 core\n"
-    "layout (location = 0) in vec4 outColor;\n"
-    "layout (location = 1) in vec2 outUV;\n"
+    "#version 330 core\n"
+    "in vec4 outColor;\n"
+    "in vec2 outUV;\n"
     "out vec4 FragColor;\n"
     "uniform sampler2D ourTexture;\n"
     "void main()\n"
@@ -157,6 +157,11 @@ int texShaderInit() {
     }
     // link shaders
     int shaderProgram = glCreateProgram();
+
+    glBindAttribLocation(shaderProgram, 0, "aPos");
+	glBindAttribLocation(shaderProgram, 1, "aColor");
+    glBindAttribLocation(shaderProgram, 2, "uv");
+
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
