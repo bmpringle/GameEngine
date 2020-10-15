@@ -19,7 +19,7 @@ elif env['PLATFORM'] == 'posix': #linux
     GLFW_DIR='/usr/local' # must 'make install' GLFW 
     GLEW_DIR='/usr/'
     LINK='g++'
-    LIBS=['GLEW','glfw3','pthread']
+    LIBS=['GLEW','glfw3','pthread', 'GL']
 else:
     print("Error, unsupported platform->", env['PLATFORM'])
     exit()
