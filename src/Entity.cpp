@@ -125,3 +125,15 @@ bool Entity::move(int mode) {
             return false;
     }
 }
+
+void Entity::interact() {
+    Tile* t1 = world->getTilePointer(x+1, y);
+    Tile* t2 = world->getTilePointer(x-1, y);
+    Tile* t3 = world->getTilePointer(x, y+1);
+    Tile* t4 = world->getTilePointer(x, y-1);
+
+    if(t1 != nullptr) t1->interactionOn(this);
+    if(t2 != nullptr) t2->interactionOn(this);
+    if(t3 != nullptr) t3->interactionOn(this);
+    if(t4 != nullptr) t4->interactionOn(this);
+}

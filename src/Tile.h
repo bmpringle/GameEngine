@@ -4,7 +4,9 @@
 #include<GL/glew.h>
 #include<iostream>
 #include"Init.h"
+#include<functional>
 
+class Entity;
 class World;
 
 class Tile {
@@ -77,6 +79,8 @@ class Tile {
 
         std::vector<Tile>* getAttachments();
 
+        void interactionOn(Entity* e);
+
     protected:
         unsigned int VAO;
         unsigned int VBOV, VBOC, VBOT;
@@ -91,5 +95,8 @@ class Tile {
         float bBase = 1;
         float vertices[18] = {};
         std::vector<Tile> attachments = std::vector<Tile>();
+        std::function<void(World* world, Entity* e)> interactionFunction = [](World* world, Entity* e) {};
+    private:
+        
 };
 #endif

@@ -37,6 +37,9 @@ void processInput(GLFWwindow *window, World* world) {
             start = std::chrono::system_clock::now();       
         }
     }
+    if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) {
+        world->getPlayer()->interact();
+    } 
 }
 
 int main(int argc, char** argv) {   

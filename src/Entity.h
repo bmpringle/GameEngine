@@ -25,6 +25,8 @@ class Entity : public Tile {
         */
         bool move(int mode);
 
+        void interact();
+
     private:
 };
 #endif

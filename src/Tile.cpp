@@ -244,3 +244,7 @@ void Tile::addAttachment(Tile a) {
 std::vector<Tile>* Tile::getAttachments() {
     return &attachments;
 }
+
+void Tile::interactionOn(Entity* e) {
+    interactionFunction(world, e);
+}
