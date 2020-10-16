@@ -49,6 +49,14 @@ void World::render(int program, int texprogram) {
         }
     }
 
+    for(Tile tile : tiles) {
+        if(tile.hasTexture) {
+            tile.renderAttachments(texprogram, unitToNormal, 0, 0);
+        }else {
+            tile.renderAttachments(program, unitToNormal, 0, 0);
+        }
+    }
+
     float x = player.getX();
     float y = player.getY();
     player.setPos(0, 0);

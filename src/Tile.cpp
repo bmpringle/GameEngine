@@ -146,10 +146,6 @@ void Tile::render(int program, float unitsToNormal, float _x, float _y) {
     glUseProgram(program);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
-
-    for(Tile a : attachments) {
-        a.render(program, unitsToNormal, x+_x, y+_y);
-    }
 }
 
 void Tile::render(int program, float unitsToNormal) {
@@ -179,13 +175,9 @@ void Tile::loadTexture(std::string asset) {
 
     glBindTexture(GL_TEXTURE_2D, TBO); 
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-
+    
     if(nrChannels == 3) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     }else {
@@ -247,4 +239,14 @@ std::vector<Tile>* Tile::getAttachments() {
 
 void Tile::interactionOn(Entity* e) {
     interactionFunction(world, e);
+}
+
+void Tile::renderAttachments(int program, float unitsToNormal, int _x, int _y) {
+    for(Tile a : attachments) {
+        a.render(program, unitsToNormal, x+_x, y+_y);
+    }
+
+    for(Tile a : attachments) {
+        a.renderAttachments(program, unitsToNormal, _x+x, _y+y);
+    }
 }

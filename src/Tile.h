@@ -31,6 +31,8 @@ class Tile {
 
         void render(int program, float unitsToNormal, float _x, float _y);
 
+        void renderAttachments(int program, float unitsToNormal, int _x, int _y);
+
         void setPos(float _x, float _y);
 
         void setPos(float _x, float _y, float _z);
