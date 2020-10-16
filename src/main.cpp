@@ -62,6 +62,9 @@ int main(int argc, char** argv) {
 
     glEnable(GL_DEPTH_TEST);  
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     int program = shaderInit();
     int texprogram = texShaderInit();
 

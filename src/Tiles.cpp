@@ -67,7 +67,7 @@ void Tiles::tileInit() {
         0.6, 0.6, 0
     };
 
-    Tile mug = Tile(0.2, 0.2, "mug", mug_vertices);
+    Tile mug = Tile(0, 0, "mug", mug_vertices);
     mug.setPos(0, 0, -2);
     mug.setPermissable(0, false);
     mug.setPermissable(1, false);
