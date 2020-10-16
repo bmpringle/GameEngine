@@ -19,20 +19,23 @@ void processInput(GLFWwindow *window, World* world) {
     std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now()-start;
     
     if(elapsed_seconds.count() > 0.25) {
-        if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        if((glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) ||
+           (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)) {
             world->getPlayer()->move(0);  
             start = std::chrono::system_clock::now();       
         }
-
-        if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        if((glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) ||
+           (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)) {
             world->getPlayer()->move(2);  
             start = std::chrono::system_clock::now();       
         }
-        if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        if((glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) ||
+           (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) {
             world->getPlayer()->move(1);  
             start = std::chrono::system_clock::now();       
         }
-        if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        if((glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) ||
+           (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)) {
             world->getPlayer()->move(3);  
             start = std::chrono::system_clock::now();       
         }
