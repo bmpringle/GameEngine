@@ -3,9 +3,10 @@
 #include<vector>
 #include"Tile.h"
 #include"Entity.h"
+#include<chrono>
 
 class World {
-    public:        
+    public:   
         World();
 
         void parseWorld(std::string world);
@@ -13,6 +14,10 @@ class World {
         void addTile(Tile t);
 
         void addEntity(Entity t);
+
+        void addPlayer(Entity e);
+
+        Entity* getPlayer();
 
         std::vector<Tile>* getTilesPointer();
 
@@ -29,6 +34,6 @@ class World {
         std::vector<Tile> tiles = std::vector<Tile>();
         std::vector<Entity> entities = std::vector<Entity>();
         float unitToNormal = 1.0/5.0;
-
+        Entity player = Entity(0, 0);
 };
 #endif

@@ -89,8 +89,8 @@ void Tile::render(int program, float unitsToNormal) {
     };
 
     for(int i = 0; i<18; i+=3) {
-        tempvertices[i] = tempvertices[i]+x;
-        tempvertices[i+1] = tempvertices[i+1]+y;
+        tempvertices[i] = tempvertices[i]+x-world->getPlayer()->getX();
+        tempvertices[i+1] = tempvertices[i+1]+y-world->getPlayer()->getY();
     }
 
     for(int i = 0; i<18; ++i) {
@@ -168,4 +168,9 @@ float Tile::getY() {
 void Tile::changePos(float xUnits, float yUnits) {
     x+=xUnits;
     y+=yUnits;
+}
+
+void Tile::setPos(float _x, float _y) {
+    x = _x;
+    y = _y;
 }

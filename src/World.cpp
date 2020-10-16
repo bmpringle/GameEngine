@@ -5,7 +5,17 @@
 #include"Tiles.h"
 
 World::World() {
-
+    float player_vertices[] = {
+        0.4, 0.15, -1,
+        0.6, 0.15, -1,
+        0.6, 0.85, -1,
+        0.4, 0.15, -1,
+        0.4, 0.85, -1,
+        0.6, 0.85, -1
+    };
+    player = Entity(0, 0, "player", player_vertices);
+    player.loadTexture("player.png");
+    player.world = this;
 }
 
 void World::addTile(Tile t) {
@@ -37,6 +47,16 @@ void World::render(int program, int texprogram) {
             entity.render(program, unitToNormal);
         }
     }
+
+    float x = player.getX();
+    float y = player.getY();
+    player.setPos(0, 0);
+    if(player.hasTexture) {
+        player.render(texprogram, unitToNormal);
+    }else {
+        player.render(program, unitToNormal);
+    }
+    player.setPos(x, y);
 }
 
 Tile* World::getTilePointer(float x, float y) {
@@ -62,20 +82,22 @@ void World::parseWorld(std::string world) {
             result.push_back(item);
         }
 
-        if(result.size() == 2) {
-            int x = std::stoi(result.at(0));
-            int y = std::stoi(result.at(1));
-            std::string type = "generic";
-            Tile t = Tiles::getType(type);
-            t.changePos(x, y);
-            addTile(t);            
-        }else {
-            int x = std::stoi(result.at(1));
-            int y = std::stoi(result.at(2));
-            std::string type = result.at(0);
-            Tile t = Tiles::getType(type);
-            t.changePos(x, y);
-            addTile(t);
+        if(result.size() != 0) {
+            if(result.size() == 2) {
+                int x = std::stoi(result.at(0));
+                int y = std::stoi(result.at(1));
+                std::string type = "generic";
+                Tile t = Tiles::getType(type);
+                t.changePos(x, y);
+                addTile(t);            
+            }else {
+                int x = std::stoi(result.at(1));
+                int y = std::stoi(result.at(2));
+                std::string type = result.at(0);
+                Tile t = Tiles::getType(type);
+                t.changePos(x, y);
+                addTile(t);
+            }
         }
     }
 }
@@ -97,4 +119,8 @@ Entity* World::getEntityPointer(float x, float y) {
         }
     }
     return nullptr;
+}
+
+Entity* World::getPlayer() {
+    return &player;
 }

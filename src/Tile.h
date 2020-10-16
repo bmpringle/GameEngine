@@ -23,6 +23,8 @@ class Tile {
 
         void render(int program, float unitsToNormal);
 
+        void setPos(float _x, float _y);
+
         float getX();
 
         float getY();

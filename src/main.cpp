@@ -11,21 +11,33 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }  
 
+auto start = std::chrono::system_clock::now();
+
 void processInput(GLFWwindow *window, World* world) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        world->getEntitiesPointer()->at(0).move(0);
+    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now()-start;
+    
+    if(elapsed_seconds.count() > 0.25) {
+        if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            world->getPlayer()->move(0);  
+            start = std::chrono::system_clock::now();       
+        }
 
-    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        world->getEntitiesPointer()->at(0).move(2);
-
-    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        world->getEntitiesPointer()->at(0).move(1);
-
-    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        world->getEntitiesPointer()->at(0).move(3);
+        if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            world->getPlayer()->move(2);  
+            start = std::chrono::system_clock::now();       
+        }
+        if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            world->getPlayer()->move(1);  
+            start = std::chrono::system_clock::now();       
+        }
+        if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            world->getPlayer()->move(3);  
+            start = std::chrono::system_clock::now();       
+        }
+    }
 }
 
 int main(int argc, char** argv) {   
@@ -48,21 +60,9 @@ int main(int argc, char** argv) {
 
     Tiles::tileInit();
 
-    float player_vertices[] = {
-        0.4, 0.15, -1,
-        0.6, 0.15, -1,
-        0.6, 0.85, -1,
-        0.4, 0.15, -1,
-        0.4, 0.85, -1,
-        0.6, 0.85, -1
-    };
-
     World world = World();
-    Entity player = Entity(0, 0, "player", player_vertices);
-    player.loadTexture("player.png");
-    
+
     world.parseWorld("world.txt");
-    world.addEntity(player);
 
     while(!glfwWindowShouldClose(window)) {
         processInput(window, &world);
