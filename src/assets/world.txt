@@ -29,7 +29,8 @@ bwall 2 4
 rwall 1 3
 0 2
 0 3
-0 4
+table 0 4
+attach mug 0.2 4.2
 1 4
 0 5
 1 5

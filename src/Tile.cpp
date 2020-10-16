@@ -16,16 +16,47 @@ Tile::Tile(float _x, float _y) {
     permissable.push_back(true);
 
     float iverts[] = {
-        0, 0, z,
-        1, 0, z,
-        1, 1, z,
-        0, 0, z,
-        0, 1, z,
-        1, 1, z
+        0, 0, 0,
+        1, 0, 0,
+        1, 1, 0,
+        0, 0, 0,
+        0, 1, 0,
+        1, 1, 0
     };
 
     for(int i=0; i<18; ++i) {
         vertices[i] = iverts[i];
+    }
+}
+
+Tile::Tile(float _x, float _y, float* _vertices) {
+    x = _x;
+    y = _y;
+    z = 0;
+    initVAO();
+    permissable.push_back(true);
+    permissable.push_back(true);
+    permissable.push_back(true);
+    permissable.push_back(true);
+
+    for(int i=0; i<18; ++i) {
+        vertices[i] = _vertices[i];
+    }
+}
+
+Tile::Tile(float _x, float _y, std::string _type, float* _vertices) {
+    x = _x;
+    y = _y;
+    z = 0;
+    initVAO();
+    permissable.push_back(true);
+    permissable.push_back(true);
+    permissable.push_back(true);
+    permissable.push_back(true);
+    type = _type;
+
+    for(int i=0; i<18; ++i) {
+        vertices[i] = _vertices[i];
     }
 }
 
@@ -41,12 +72,12 @@ Tile::Tile(float _x, float _y, std::string _type) {
     type = _type;
 
     float iverts[] = {
-        0, 0, z,
-        1, 0, z,
-        1, 1, z,
-        0, 0, z,
-        0, 1, z,
-        1, 1, z
+        0, 0, 0,
+        1, 0, 0,
+        1, 1, 0,
+        0, 0, 0,
+        0, 1, 0,
+        1, 1, 0
     };
 
     for(int i=0; i<18; ++i) {
@@ -62,8 +93,7 @@ bool Tile::getPermissable(int direction) {
     return permissable[direction];
 }
 
-void Tile::render(int program, float unitsToNormal) {
-
+void Tile::render(int program, float unitsToNormal, float _x, float _y) {
     float tempvertices[18] = { };
 
     for(int i=0; i<18; ++i) {
@@ -89,8 +119,9 @@ void Tile::render(int program, float unitsToNormal) {
     };
 
     for(int i = 0; i<18; i+=3) {
-        tempvertices[i] = tempvertices[i]+x-world->getPlayer()->getX();
-        tempvertices[i+1] = tempvertices[i+1]+y-world->getPlayer()->getY();
+        tempvertices[i] = tempvertices[i]+x+_x-world->getPlayer()->getX();
+        tempvertices[i+1] = tempvertices[i+1]+y+_y-world->getPlayer()->getY();
+        tempvertices[i+2] = tempvertices[i+2]+z;
     }
 
     for(int i = 0; i<18; ++i) {
@@ -115,6 +146,14 @@ void Tile::render(int program, float unitsToNormal) {
     glUseProgram(program);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
+
+    for(Tile a : attachments) {
+        a.render(program, unitsToNormal, x+_x, y+_y);
+    }
+}
+
+void Tile::render(int program, float unitsToNormal) {
+    render(program, unitsToNormal, 0, 0);
 }
 
 void Tile::initVAO() {
@@ -140,10 +179,18 @@ void Tile::loadTexture(std::string asset) {
 
     glBindTexture(GL_TEXTURE_2D, TBO); 
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    if(nrChannels == 3) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    }else {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    }
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -165,6 +212,10 @@ float Tile::getY() {
     return y;
 }
 
+float Tile::getZ() {
+    return z;
+}
+
 void Tile::changePos(float xUnits, float yUnits) {
     x+=xUnits;
     y+=yUnits;
@@ -173,4 +224,23 @@ void Tile::changePos(float xUnits, float yUnits) {
 void Tile::setPos(float _x, float _y) {
     x = _x;
     y = _y;
+}
+
+void Tile::setPos(float _x, float _y, float _z) {
+    x = _x;
+    y = _y;
+    z = _z;
+}
+
+void Tile::setType(std::string _type) {
+    type = _type;
+}
+
+void Tile::addAttachment(Tile a) {
+    a.world = world;
+    attachments.push_back(a);
+}
+
+std::vector<Tile>* Tile::getAttachments() {
+    return &attachments;
 }

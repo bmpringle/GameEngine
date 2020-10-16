@@ -51,6 +51,30 @@ void Tiles::tileInit() {
 
     Tile generic = Tile(0, 0, "generic");
 
+    Tile table = Tile(0, 0, "table");
+    table.setPermissable(0, false);
+    table.setPermissable(1, false);
+    table.setPermissable(2, false);
+    table.setPermissable(3, false);
+    table.loadTexture("table.png");
+
+    float mug_vertices[] = {
+        0.4, 0.4, 0,
+        0.6, 0.4, 0,
+        0.6, 0.6, 0,
+        0.4, 0.4, 0,
+        0.4, 0.6, 0,
+        0.6, 0.6, 0
+    };
+
+    Tile mug = Tile(0.2, 0.2, "mug", mug_vertices);
+    mug.setPos(0, 0, -2);
+    mug.setPermissable(0, false);
+    mug.setPermissable(1, false);
+    mug.setPermissable(2, false);
+    mug.setPermissable(3, false);
+    mug.loadTexture("mug.png");
+
     tileList.push_back(generic);
 
     tileList.push_back(lwall);
@@ -61,4 +85,7 @@ void Tiles::tileInit() {
     tileList.push_back(brcorner);
     tileList.push_back(tlcorner);
     tileList.push_back(trcorner);
+
+    tileList.push_back(table);
+    tileList.push_back(mug);
 }

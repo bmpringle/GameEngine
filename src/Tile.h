@@ -15,7 +15,11 @@ class Tile {
 
         Tile(float _x, float _y);
 
+        Tile(float _x, float _y, float* _vertices);
+
         Tile(float _x, float _y, std::string type);
+
+        Tile(float _x, float _y, std::string type, float* _vertices);
 
         void loadTexture(std::string asset);
 
@@ -23,11 +27,17 @@ class Tile {
 
         void render(int program, float unitsToNormal);
 
+        void render(int program, float unitsToNormal, float _x, float _y);
+
         void setPos(float _x, float _y);
+
+        void setPos(float _x, float _y, float _z);
 
         float getX();
 
         float getY();
+
+        float getZ();
 
         void changePos(float xUnits, float yUnits);
 
@@ -61,9 +71,11 @@ class Tile {
         */
         bool getPermissable(int direction);
 
-        void setType(std::string _type) {
-            type = _type;
-        }
+        void setType(std::string _type);
+
+        void addAttachment(Tile a);
+
+        std::vector<Tile>* getAttachments();
 
     protected:
         unsigned int VAO;
@@ -78,5 +90,6 @@ class Tile {
         float gBase = 1;
         float bBase = 1;
         float vertices[18] = {};
+        std::vector<Tile> attachments = std::vector<Tile>();
 };
 #endif

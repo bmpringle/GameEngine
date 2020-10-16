@@ -3,7 +3,6 @@
 #include<iostream>
 #include"Init.h"
 #include"World.h"
-#include<png.h>
 #include"Tiles.h"
 #include"Entity.h"
 
@@ -45,6 +44,8 @@ int main(int argc, char** argv) {
 
     GLFWwindow* window = createWindow(framebuffer_size_callback);
 
+    glfwSetWindowSize(window, 799, 600);
+
     _glewInit();
 
     if(window == nullptr) {
@@ -67,6 +68,7 @@ int main(int argc, char** argv) {
     while(!glfwWindowShouldClose(window)) {
         processInput(window, &world);
         glfwSwapBuffers(window);
+        _glfwFixMacOSWindow(window);
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

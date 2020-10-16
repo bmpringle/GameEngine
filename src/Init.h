@@ -7,6 +7,8 @@
 
 void _glfwInit();
 
+void _glfwFixMacOSWindow(GLFWwindow* window);
+
 void _glewInit();
 
 int shaderInit();

@@ -231,3 +231,16 @@ std::vector<unsigned int> allocateVAO() {
 
         return array;
 }
+
+bool macMoved = false;
+
+void _glfwFixMacOSWindow(GLFWwindow* window) {
+    #ifdef __APPLE__
+        if(!macMoved) {
+            int x, y;
+            glfwGetWindowPos(window, &x, &y);
+            glfwSetWindowPos(window, ++x, y);
+            macMoved = true;
+        }
+    #endif
+}
