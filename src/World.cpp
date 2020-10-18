@@ -79,19 +79,17 @@ Tile* World::getTilePointer(float x, float y) {
 
 void World::parseWorld(std::string world) {
     std::ifstream ifs = std::ifstream("src/assets/" + world);
-
-    std::string str;
-    
+    std::string line;
     std::vector<Tile> data = std::vector<Tile>();
 
-    while(std::getline(ifs, str)) {
-        std::vector<std::string> result;
-        std::stringstream ss (str);
-        std::string item;
-
-        while (std::getline(ss, item, ' ') && str != "") {
-            if(item.size() > 0) {
-                result.push_back(item);
+    while(std::getline(ifs, line)) {
+        std::vector<std::string> lineToks;
+        std::stringstream ssLine (line);
+        std::string tok;
+        // tokenize line
+        while (std::getline(ssLine, tok, ' ') && line != "") {
+            if(tok.size() > 0) {
+                lineToks.push_back(tok);
             }
         }
         /*
@@ -110,14 +108,18 @@ void World::parseWorld(std::string world) {
         * command: place
         *   paramters: the name of the tile to place, x, y, z, of tile
         */
+        // Parse Line
 
-        if(result.size() > 0) {
-            if(result[0] == "create") {
-                std::string type = result[1];
-                if(result.size() > 2) {
+        const unsigned TOK_CMD = 0;
+        const auto TOK_PARAM = [](unsigned p) {return (p+1);};
+        if(lineToks.size() > 0) {
+            if(lineToks[TOK_CMD] == "create") {
+                std::string type = lineToks[TOK_PARAM(0)];
+                if(lineToks.size() > 2) {
                     std::vector<float> vertices = std::vector<float>();
-                    for(int i = 2; i<result.size(); ++i) {
-                        vertices.push_back(std::stof(result[i]));
+                    auto nParams = lineToks.size() - 1;
+                    for(int p = 1; p<nParams; ++p) {
+                        vertices.push_back(std::stof(lineToks[TOK_PARAM(p)]));
                     }
                     Tile t = Tile(0, 0, type, vertices); 
                     data.push_back(t);
@@ -125,21 +127,19 @@ void World::parseWorld(std::string world) {
                     Tile t = Tile(0, 0, type);
                     t.world = this;
                     data.push_back(t);                   
-                }     
-
-            }else if(result[0] == "loadTexture") {
-                std::string textured = result[1];
+                }
+            } else if(lineToks[TOK_CMD] == "loadTexture") {
+                std::string textured = lineToks[TOK_PARAM(0)];
                 for(int i=0; i<data.size(); ++i) {
                     if(data[i].type == textured) {
-                        data[i].loadTexture(result[2]);
+                        data[i].loadTexture(lineToks[TOK_PARAM(1)]);
                     }
                 }
-            }else if(result[0] == "addBehavior") {
-                std::string tileName = result[1];
-
-                std::string behavior = result[2];
+            } else if(lineToks[TOK_CMD] == "addBehavior") {
+                std::string tileName = lineToks[TOK_PARAM(0)];
+                std::string behavior = lineToks[TOK_PARAM(1)];
                 if(behavior == "permissable") {
-                    std::string nsew = result[3];
+                    std::string nsew = lineToks[TOK_PARAM(2)];
                     int direction = 0;
                     if(nsew == "up") {
                         direction = 0;
@@ -153,7 +153,7 @@ void World::parseWorld(std::string world) {
                     if(nsew == "right") {
                         direction = 3;
                     }
-                    std::string truefalse = result[4];
+                    std::string truefalse = lineToks[TOK_PARAM(3)];
                     bool rTrueFalse = false;
                     if(truefalse == "true") {
                         rTrueFalse = true;
@@ -167,16 +167,16 @@ void World::parseWorld(std::string world) {
                         }
                     }
                 }
-            }else if(result[0] == "attach") {
-                std::string base = result[1];
-                std::string attachee = result[2];
-                std::string tileName = result[3];
-                float x = std::stof(result[4]);
-                float y = std::stof(result[5]);
-                float z = std::stof(result[6]);
+
+            } else if(lineToks[TOK_CMD] == "attach") {
+                std::string base = lineToks[TOK_PARAM(0)];
+                std::string attachee = lineToks[TOK_PARAM(1)];
+                std::string tileName = lineToks[TOK_PARAM(2)];
+                float x = std::stof(lineToks[TOK_PARAM(3)]);
+                float y = std::stof(lineToks[TOK_PARAM(4)]);
+                float z = std::stof(lineToks[TOK_PARAM(5)]);
 
                 Tile t = Tile(0, 0);
-
                 for(Tile t1 : data) {
                     if(t1.type == base) {
                         t = t1;
@@ -184,27 +184,27 @@ void World::parseWorld(std::string world) {
                 }
 
                 Tile a = Tile(0, 0);
-
                 for(Tile t1 : data) {
                     if(t1.type == attachee) {
                         a = t1;
                     }
-                }            
+                }
 
                 a.setPos(x, y, z);
                 t.type = tileName;
                 t.addAttachment(a);
                 data.push_back(t);
-            }else if(result[0] == "place") {           
+
+            } else if(lineToks[TOK_CMD] == "place") {
                 Tile p = Tile(0, 0);
                 for(Tile t : data) {
-                    if(t.type == result[1]) {
+                    if(t.type == lineToks[TOK_PARAM(0)]) {
                         p = t;
                     }
                 }
-                p.setPos(std::stoi(result[2]), std::stoi(result[3]), 0);
-                if(result.size() == 5) {
-                    p.changePos(0, 0, std::stoi(result[4]));
+                p.setPos(std::stoi(lineToks[TOK_PARAM(1)]), std::stoi(lineToks[TOK_PARAM(2)]), 0);
+                if(lineToks.size() == 5) {
+                    p.changePos(0, 0, std::stoi(lineToks[TOK_PARAM(3)]));
                 }
                 addTile(p);
             }
