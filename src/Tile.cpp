@@ -25,11 +25,11 @@ Tile::Tile(float _x, float _y) {
     };
 
     for(int i=0; i<18; ++i) {
-        vertices[i] = iverts[i];
+        vertices.push_back(iverts[i]);
     }
 }
 
-Tile::Tile(float _x, float _y, float* _vertices) {
+Tile::Tile(float _x, float _y, std::vector<float> _vertices) {
     x = _x;
     y = _y;
     z = 0;
@@ -39,12 +39,10 @@ Tile::Tile(float _x, float _y, float* _vertices) {
     permissable.push_back(true);
     permissable.push_back(true);
 
-    for(int i=0; i<18; ++i) {
-        vertices[i] = _vertices[i];
-    }
+    vertices = _vertices;
 }
 
-Tile::Tile(float _x, float _y, std::string _type, float* _vertices) {
+Tile::Tile(float _x, float _y, std::string _type, std::vector<float> _vertices) {
     x = _x;
     y = _y;
     z = 0;
@@ -55,9 +53,7 @@ Tile::Tile(float _x, float _y, std::string _type, float* _vertices) {
     permissable.push_back(true);
     type = _type;
 
-    for(int i=0; i<18; ++i) {
-        vertices[i] = _vertices[i];
-    }
+    vertices = _vertices;
 }
 
 Tile::Tile(float _x, float _y, std::string _type) {
@@ -81,7 +77,7 @@ Tile::Tile(float _x, float _y, std::string _type) {
     };
 
     for(int i=0; i<18; ++i) {
-        vertices[i] = iverts[i];
+        vertices.push_back(iverts[i]);
     }
 }
 
@@ -94,9 +90,9 @@ bool Tile::getPermissable(int direction) {
 }
 
 void Tile::render(int program, float unitsToNormal, float _x, float _y) {
-    float tempvertices[18] = { };
+    float tempvertices[vertices.size()];
 
-    for(int i=0; i<18; ++i) {
+    for(int i=0; i<vertices.size(); ++i) {
         tempvertices[i] = vertices[i];
     }
 
@@ -118,13 +114,13 @@ void Tile::render(int program, float unitsToNormal, float _x, float _y) {
         1, 1
     };
 
-    for(int i = 0; i<18; i+=3) {
+    for(int i = 0; i<vertices.size(); i+=3) {
         tempvertices[i] = tempvertices[i]+x+_x-world->getPlayer()->getX();
         tempvertices[i+1] = tempvertices[i+1]+y+_y-world->getPlayer()->getY();
         tempvertices[i+2] = tempvertices[i+2]+z;
     }
 
-    for(int i = 0; i<18; ++i) {
+    for(int i = 0; i<vertices.size(); ++i) {
         tempvertices[i] = tempvertices[i]*unitsToNormal;
     }
 
@@ -144,7 +140,7 @@ void Tile::render(int program, float unitsToNormal, float _x, float _y) {
     }
 
     glUseProgram(program);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, vertices.size()/3);
     glBindVertexArray(0);
 }
 
@@ -211,6 +207,12 @@ float Tile::getZ() {
 void Tile::changePos(float xUnits, float yUnits) {
     x+=xUnits;
     y+=yUnits;
+}
+
+void Tile::changePos(float xUnits, float yUnits, float zUnits) {
+    x+=xUnits;
+    y+=yUnits;
+    z+=zUnits;
 }
 
 void Tile::setPos(float _x, float _y) {

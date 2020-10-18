@@ -17,11 +17,11 @@ class Tile {
 
         Tile(float _x, float _y);
 
-        Tile(float _x, float _y, float* _vertices);
+        Tile(float _x, float _y, std::vector<float> _vertices);
 
         Tile(float _x, float _y, std::string type);
 
-        Tile(float _x, float _y, std::string type, float* _vertices);
+        Tile(float _x, float _y, std::string type, std::vector<float> _vertices);
 
         void loadTexture(std::string asset);
 
@@ -44,6 +44,8 @@ class Tile {
         float getZ();
 
         void changePos(float xUnits, float yUnits);
+
+        void changePos(float xUnits, float yUnits, float zUnits);
 
         bool hasTexture = false;
 
@@ -95,7 +97,7 @@ class Tile {
         float rBase = 1;
         float gBase = 1;
         float bBase = 1;
-        float vertices[18] = {};
+        std::vector<float> vertices = std::vector<float>();
         std::vector<Tile> attachments = std::vector<Tile>();
         std::function<void(World* world, Entity* e)> interactionFunction = [](World* world, Entity* e) {};
     private:
