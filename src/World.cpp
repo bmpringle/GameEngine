@@ -104,6 +104,10 @@ void World::parseWorld(std::string world) {
         *       behaviors:
         *           permissable:
         *               up/down/left/right, true/false 
+        *           showAttachmentOnInteractionTimed:
+        *               attachment to show, time to show for, x, y, z offset for the attachee
+        *           showAndHideAttachmentOnInteraction:
+        *               attachment to show, x, y, z offset for the attachee
         * command: attach
         *   parameters: tile to attach to, tile being attached, new tile name, x, y, z offset for the attachee
         * 
@@ -164,6 +168,49 @@ void World::parseWorld(std::string world) {
                     for(int i=0; i<data.size(); ++i) {
                         if(data[i].type == tileName) {
                             data[i].setPermissable(direction, rTrueFalse);
+                        }
+                    }
+                }else if(behavior == "showAttachmentOnInteractionTimed"){
+                    std::string attachment = result[3];
+                    float timeToShowFor = std::stof(result[4]);
+                    float x = std::stof(result[5]);
+                    float y = std::stof(result[6]);
+                    float z = std::stof(result[7]);
+
+                    Tile a = Tile(0, 0);
+
+                    for(Tile t : data) {
+                        if(t.type == attachment) {
+                            a = t;
+                        }
+                    }
+
+                    a.setPos(x, y, z);
+
+                    for(int i=0; i<data.size(); ++i) {
+                        if(data[i].type == tileName) {
+                            data[i].showAttachmentOnInteractionTimed(a, timeToShowFor);
+                        }
+                    }
+                }else if(behavior == "showAndHideAttachmentOnInteraction"){
+                    std::string attachment = result[3];
+                    float x = std::stof(result[4]);
+                    float y = std::stof(result[5]);
+                    float z = std::stof(result[6]);
+
+                    Tile a = Tile(0, 0);
+
+                    for(Tile t : data) {
+                        if(t.type == attachment) {
+                            a = t;
+                        }
+                    }
+
+                    a.setPos(x, y, z);
+
+                    for(int i=0; i<data.size(); ++i) {
+                        if(data[i].type == tileName) {
+                            data[i].showAndHideAttachmentOnInteraction(a);
                         }
                     }
                 }
@@ -233,4 +280,15 @@ Entity* World::getEntityPointer(float x, float y) {
 
 Entity* World::getPlayer() {
     return &player;
+}
+
+void World::update() {
+    for(int i=0; i<tiles.size(); ++i) {
+        tiles[i].update();
+    }
+
+    for(int i=0; i<entities.size(); ++i) {
+        entities[i].update();
+    }
+    player.update();
 }
