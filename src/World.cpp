@@ -171,11 +171,11 @@ void World::parseWorld(std::string world) {
                         }
                     }
                 }else if(behavior == "showAttachmentOnInteractionTimed"){
-                    std::string attachment = result[3];
-                    float timeToShowFor = std::stof(result[4]);
-                    float x = std::stof(result[5]);
-                    float y = std::stof(result[6]);
-                    float z = std::stof(result[7]);
+                    std::string attachment = lineToks[3];
+                    float timeToShowFor = std::stof(lineToks[4]);
+                    float x = std::stof(lineToks[5]);
+                    float y = std::stof(lineToks[6]);
+                    float z = std::stof(lineToks[7]);
 
                     Tile a = Tile(0, 0);
 
@@ -193,10 +193,10 @@ void World::parseWorld(std::string world) {
                         }
                     }
                 }else if(behavior == "showAndHideAttachmentOnInteraction"){
-                    std::string attachment = result[3];
-                    float x = std::stof(result[4]);
-                    float y = std::stof(result[5]);
-                    float z = std::stof(result[6]);
+                    std::string attachment = lineToks[3];
+                    float x = std::stof(lineToks[4]);
+                    float y = std::stof(lineToks[5]);
+                    float z = std::stof(lineToks[6]);
 
                     Tile a = Tile(0, 0);
 
