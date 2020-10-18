@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+case $1 in
+  Rel)
+    scons -j6 DBG=0
+    ./bin/rel/tstGame
+    ;;
+  Dbg)
+    scons -j6 DBG=1
+    ./bin/dbg/tstGame
+    ;;
+  All)
+    scons -j6 DBG=0
+    scons -j6 DBG=1
+    ./bin/rel/tstGame
+    ./bin/dbg/tstGame
+    ;;
+esac
