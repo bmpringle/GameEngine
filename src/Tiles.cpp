@@ -13,7 +13,7 @@ Tile Tiles::getType(std::string type) {
 }
 
 void Tiles::tileInit() {  
-    Tile lwall = Tile(0, 0, "lwall");
+    /*Tile lwall = Tile(0, 0, "lwall");
     lwall.loadTexture("lwall.png");
     lwall.setPermissable(2, false);
     
@@ -87,5 +87,5 @@ void Tiles::tileInit() {
     tileList.push_back(trcorner);
 
     tileList.push_back(table);
-    tileList.push_back(mug);
+    tileList.push_back(mug);*/
 }

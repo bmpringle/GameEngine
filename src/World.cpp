@@ -78,51 +78,160 @@ Tile* World::getTilePointer(float x, float y) {
 }
 
 void World::parseWorld(std::string world) {
-    std::ifstream ifs = std::ifstream("src/assets/" + world);
+    std::ifstream ifs = std::ifstream("/home/bmp/Development/C++/Game/src/assets/" + world);
 
     std::string str;
     
+    std::vector<Tile> data = std::vector<Tile>();
+
     while(std::getline(ifs, str)) {
         std::vector<std::string> result;
         std::stringstream ss (str);
         std::string item;
 
         while (std::getline(ss, item, ' ')) {
-            result.push_back(item);
-        }
-        
-        if(result.size() != 0) {
-            if(result[0] == "attach") {
-                float x = std::stof(result.at(2));
-                float y = std::stof(result.at(3));
-                int xTile = floor(x);
-                int yTile = floor(y);
-                float xMod = x-xTile;
-                float yMod = y-yTile;
-
-                std::string type = result.at(1);
-                Tile t = Tiles::getType(type);          
-                t.changePos(xMod, yMod);
-                this->getTilePointer(xTile, yTile)->addAttachment(t);
-            }else {
-                if(result.size() == 2) {
-                    int x = std::stoi(result.at(0));
-                    int y = std::stoi(result.at(1));
-                    std::string type = "generic";
-                    Tile t = Tiles::getType(type);
-                    t.changePos(x, y);
-                    addTile(t);            
-                }else {
-                    int x = std::stoi(result.at(1));
-                    int y = std::stoi(result.at(2));
-                    std::string type = result.at(0);
-                    Tile t = Tiles::getType(type);
-                    t.changePos(x, y);
-                    addTile(t);
-                }
+            if(item.size() > 1) {
+                result.push_back(item);
             }
         }
+        /*
+        * command: create 
+        *   parameters: type(required), vertices(optional) 
+        * command: loadTexture
+        *   paramters: tile to load to, asset name 
+        * command: addBehavior
+        *   parameters: tile to add to, predefined behaviors with their proper parameters
+        *       behaviors:
+        *           permissable:
+        *               up/down/left/right, true/false 
+        * command: attach
+        *   parameters: tile to attach to, tile being attached, new tile name, x, y, z offset for the attachee
+        * 
+        * command: place
+        *   paramters: the name of the tile to place, x, y, z, of tile
+        */
+
+        std::cout << str << " | ";
+        for(std::string res : result) {
+            std::cout << res << ", ";
+        }
+        std::cout << std::endl;
+
+       /*if(result[0] == "create") {
+            std::string type = result[1];
+            std::string _vertices = (result.size() == 3) ? result[2] : ""; 
+            
+            if(_vertices != "") {
+                std::vector<float> vertices = std::vector<float>();
+                std::string vertex;
+                std::stringstream ss(_vertices);
+                while(getline(ss, vertex, ' ')) {
+                    vertices.push_back(std::stof(vertex));
+                }
+                Tile t = Tile(0, 0, type, vertices); 
+                data.push_back(t);       
+            }else {
+                Tile t = Tile(0, 0, type);
+                t.world = this;
+                data.push_back(t);                   
+            }     
+
+        }else if(result[0] == "loadTexture") {
+            std::string textured = result[1];
+            for(int i=0; i<data.size(); ++i) {
+                if(data[i].type == textured) {
+                    data[i].loadTexture(result[2]);
+                }
+            }
+        }else if(result[0] == "addBehavior") {
+            std::string tileName = result[1];
+            Tile t = Tile(0, 0);
+
+            std::string behavior = result[2];
+            if(behavior == "permissable") {
+                std::string nsew = result[3];
+                int direction = 0;
+                if(nsew == "up") {
+                    direction = 0;
+                }
+                if(nsew == "down") {
+                    direction = 1;
+                }
+                if(nsew == "left") {
+                    direction = 2;
+                }
+                if(nsew == "right") {
+                    direction = 3;
+                }
+                std::string truefalse = result[4];
+                bool rTrueFalse = false;
+                if(truefalse == "true") {
+                    rTrueFalse = true;
+                }else {
+                    rTrueFalse = false;
+                }
+
+                for(int i=0; i<data.size(); ++i) {
+                    if(data[i].type == tileName) {
+                       data[i].setPermissable(direction, rTrueFalse);
+                    }
+                }
+            }
+        }else if(result[0] == "attach") {
+            std::string base = result[1];
+            std::string attachee = result[2];
+            std::string tileName = result[3];
+            float x = std::stof(result[4]);
+            float y = std::stof(result[5]);
+            float z = std::stof(result[6]);
+
+            Tile t = Tile(0, 0);
+
+            for(Tile t1 : data) {
+                if(t1.type == base) {
+                    t = t1;
+                }
+            }
+
+            Tile a = Tile(0, 0);
+
+            for(Tile t1 : data) {
+                if(t1.type == attachee) {
+                    a = t1;
+                }
+            }            
+
+            t.type = tileName;
+            t.addAttachment(a);
+            data.push_back(t);
+        }else if(result[0] == "place") {
+            
+            std::cout << "place " << result[1] << std::endl;
+            Tile p = Tile(0, 0);
+            for(Tile t : data) {
+                if(t.type == result[1]) {
+                    p = t;
+                }
+            }
+            std::cout << "p type = " << p.type << std::endl;
+            p.setPos(std::stoi(result[2]), std::stoi(result[3]), 0);
+            if(result.size() == 5) {
+                p.changePos(0, 0, std::stoi(result[3]));
+            }
+            addTile(p);
+        }*/
     }
+}
+
+std::vector<std::string> World::parseLine(std::string line) {
+    std::vector<std::string> substrs = std::vector<std::string>();
+    std::string delim = " ";
+    size_t n = 0;
+    while(n != std::string::npos) {
+        substrs.push_back(line.substr(n, line.find(delim, n+1)));
+        n = line.find(delim, n+1);
+    }
+    return substrs;
 }
 
 void World::addEntity(Entity t) {

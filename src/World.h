@@ -1,9 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
-#include<vector>
 #include"Tile.h"
 #include"Entity.h"
-#include<chrono>
 
 class World {
     public:   
@@ -35,5 +33,7 @@ class World {
         std::vector<Entity> entities = std::vector<Entity>();
         float unitToNormal = 1.0/5.0;
         Entity player = Entity(0, 0);
+
+        std::vector<std::string> parseLine(std::string line);
 };
 #endif

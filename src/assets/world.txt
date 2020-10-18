@@ -1,41 +1,58 @@
-blcorner -1 -2
-lwall -1 -1
-lwall -1 0
-lwall -1 1
-tlcorner -1 2
-trcorner 1 2
-rwall 1 1
-rwall 1 0
-rwall 1 -1
-brcorner 1 -2
-bwall 0 -2
-0 1
-0 0
-0 -1
-
-lwall -1 3
-lwall -1 4
-lwall -1 5
-tlcorner -1 6
-twall 0 6
-twall 1 6
-twall 2 6
-twall 3 6
-trcorner 4 6
-rwall 4 5
-brcorner 4 4
-bwall 3 4
-bwall 2 4
-rwall 1 3
-
-0 2
-0 3
-1 4
-0 5
-1 5
-2 5
-3 5
-
-table 0 4
-attach mug 0.3 4.2
-attach mug -0.2 3.95
+create blcorner
+loadTexture blcorner blcorner.png
+create brcorner
+loadTexture brcorner brcorner.png
+create tlcorner
+loadTexture tlcorner tlcorner.png
+create trcorner
+loadTexture trcorner trcorner.png
+create lwall
+loadTexture lwall lwall.png
+create rwall
+loadTexture rwall rwall.png
+create bwall
+loadTexture bwall bwall.png
+create twall
+loadTexture twall twall.png
+create table
+loadTexture table table.png
+create mug
+loadTexture mug mug.png
+create generic
+attach table mug tableWithMug 0.2 0.2 -1
+place blcorner -1 -2
+place lwall -1 -1
+place lwall -1 0
+place lwall -1 1
+place tlcorner -1 2
+place trcorner 1 2
+place rwall 1 1
+place rwall 1 0
+place rwall 1 -1
+place brcorner 1 -2
+place bwall 0 -2
+place generic 0 1
+place generic 0 0
+place generic 0 -1
+place lwall -1 3
+place lwall -1 4
+place lwall -1 5
+place tlcorner -1 6
+place twall 0 6
+place twall 1 6
+place twall 2 6
+place twall 3 6
+place trcorner 4 6
+place rwall 4 5
+place brcorner 4 4
+place bwall 3 4
+place bwall 2 4
+place rwall 1 3
+place generic 0 2
+place generic 0 3
+place generic 1 4
+place generic 0 5
+place generic 1 5
+place generic 2 5
+place generic 3 5
+place tableWithMug 0 4
