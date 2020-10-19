@@ -146,6 +146,13 @@ void Tile::render(int program, float unitsToNormal, float _x, float _y) {
 
 void Tile::render(int program, float unitsToNormal) {
     render(program, unitsToNormal, 0, 0);
+    if(showInterAttachTimed) {
+        attachementToShowOnInteractionTimed[0].render(program, unitsToNormal, x, y);
+    }
+
+    if(showInterAttach) {
+        attachementToShowAndHideOnInteraction[0].render(program, unitsToNormal, x, y);
+    }
 }
 
 void Tile::initVAO() {
@@ -240,15 +247,59 @@ std::vector<Tile>* Tile::getAttachments() {
 }
 
 void Tile::interactionOn(Entity* e) {
-    interactionFunction(world, e);
+    if(attachementToShowOnInteractionTimed.size() > 0) {
+        showInterAttachTimed = true;
+        start_interaction_show_timer = std::chrono::system_clock::now();
+    }
+
+    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now()-start_buffer_show_timer;
+    if(attachementToShowAndHideOnInteraction.size() > 0 && elapsed_seconds.count() > 0.5) {
+        showInterAttach = !showInterAttach;
+        start_buffer_show_timer = std::chrono::system_clock::now();
+    }
 }
 
 void Tile::renderAttachments(int program, float unitsToNormal, int _x, int _y) {
     for(Tile a : attachments) {
         a.render(program, unitsToNormal, x+_x, y+_y);
+        if(a.showInterAttachTimed) {
+            a.attachementToShowOnInteractionTimed[0].render(program, unitsToNormal, x+_x, y+_y);
+        }
+
+        if(a.showInterAttach) {
+            a.attachementToShowAndHideOnInteraction[0].render(program, unitsToNormal, x+_x, y+_y);
+        }
     }
 
     for(Tile a : attachments) {
-        a.renderAttachments(program, unitsToNormal, _x+x, _y+y);
+        a.renderAttachments(program, unitsToNormal, x+_x, y+_y);
     }
+}
+
+void Tile::update() {
+    if(showInterAttachTimed) {
+        std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now()-start_interaction_show_timer;
+        if(elapsed_seconds.count() >= timeToShow) {
+            showInterAttachTimed = false;
+        }
+    }
+}
+
+void Tile::showAndHideAttachmentOnInteraction(Tile a) {
+    a.world = world;
+    if(attachementToShowAndHideOnInteraction.size() == 0) {
+        attachementToShowAndHideOnInteraction.push_back(a);
+    }else {
+        attachementToShowAndHideOnInteraction[0] = a;
+    }
+}
+
+void Tile::showAttachmentOnInteractionTimed(Tile a, float time) {
+    a.world = world;
+    if(attachementToShowOnInteractionTimed.size() == 0) {
+        attachementToShowOnInteractionTimed.push_back(a);
+    }else {
+        attachementToShowOnInteractionTimed[0] = a;
+    }
+    timeToShow = time;
 }

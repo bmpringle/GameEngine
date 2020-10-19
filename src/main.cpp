@@ -10,37 +10,47 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }  
 
-auto start = std::chrono::system_clock::now();
+auto start_logic_timer = std::chrono::system_clock::now();
+
+void update(World* world) {
+    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now()-start_logic_timer;
+    if(elapsed_seconds.count() > 0.05) {
+        start_logic_timer = std::chrono::system_clock::now();
+        world->update();
+    }
+}
+
+auto start_input_timer = std::chrono::system_clock::now();
 
 void processInput(GLFWwindow *window, World* world) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now()-start;
+    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now()-start_input_timer;
     
     if(elapsed_seconds.count() > 0.25) {
         if((glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)) {
             world->getPlayer()->move(0);  
-            start = std::chrono::system_clock::now();       
+            start_input_timer = std::chrono::system_clock::now();       
         }
         if((glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)) {
             world->getPlayer()->move(2);  
-            start = std::chrono::system_clock::now();       
+            start_input_timer = std::chrono::system_clock::now();       
         }
         if((glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) {
             world->getPlayer()->move(1);  
-            start = std::chrono::system_clock::now();       
+            start_input_timer = std::chrono::system_clock::now();       
         }
         if((glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)) {
             world->getPlayer()->move(3);  
-            start = std::chrono::system_clock::now();       
+            start_input_timer = std::chrono::system_clock::now();       
         }
     }
-    if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) {
+    if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
         world->getPlayer()->interact();
     } 
 }
@@ -76,6 +86,7 @@ int main(int argc, char** argv) {
 
     while(!glfwWindowShouldClose(window)) {
         processInput(window, &world);
+        update(&world);
         glfwSwapBuffers(window);
         _glfwFixMacOSWindow(window);
         

@@ -17,6 +17,8 @@ class World {
 
         void addPlayer(Entity e);
 
+        void update();
+
         Entity* getPlayer();
 
         std::vector<Tile>* getTilesPointer();

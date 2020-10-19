@@ -81,9 +81,15 @@ class Tile {
 
         void addAttachment(Tile a);
 
+        void showAttachmentOnInteractionTimed(Tile a, float time);
+
+        void showAndHideAttachmentOnInteraction(Tile a);
+
         std::vector<Tile>* getAttachments();
 
         void interactionOn(Entity* e);
+
+        void update();
 
     protected:
         unsigned int VAO;
@@ -99,7 +105,18 @@ class Tile {
         float bBase = 1;
         std::vector<float> vertices = std::vector<float>();
         std::vector<Tile> attachments = std::vector<Tile>();
-        std::function<void(World* world, Entity* e)> interactionFunction = [](World* world, Entity* e) {};
+
+        //size should never be greater than 1. vector is used as a wrapper to allow a tile to be in a tile.
+        std::vector<Tile> attachementToShowOnInteractionTimed = std::vector<Tile>();
+        float timeToShow = 0;
+        bool showInterAttachTimed = false;
+        std::chrono::system_clock::time_point start_interaction_show_timer = std::chrono::system_clock::now();
+
+        //size should never be greater than 1. vector is used as a wrapper to allow a tile to be in a tile.
+        std::vector<Tile> attachementToShowAndHideOnInteraction = std::vector<Tile>();
+        bool showInterAttach = false;
+        std::chrono::system_clock::time_point start_buffer_show_timer = std::chrono::system_clock::now();
+
     private:
         
 };
