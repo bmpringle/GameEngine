@@ -11,19 +11,24 @@ class Entity : public Tile {
         Entity(float _x, float _y, float* _vertices);
 
         Entity(float _x, float _y, std::string type, float* _vertices);
+
+        enum E_DIRECTION {
+            EDIR_UP     = 0,
+            EDIR_DOWN   = 1,
+            EDIR_LEFT   = 2,
+            EDIR_RIGHT  = 3,
+            EDIR_NUM    = 4
+        };
+
         /*
         parameters: 
-            int mode:
-                0: move up
-                1: move down
-                2: move left
-                3: move right
+            E_DIRECTION direction:
         return:
             bool:
                 true: move succesful
                 false: move failed
         */
-        bool move(int mode);
+        bool move(E_DIRECTION direction);
 
         void interact();
 

@@ -31,22 +31,23 @@ void processInput(GLFWwindow *window, World* world) {
     if(elapsed_seconds.count() > 0.25) {
         if((glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)) {
-            world->getPlayer()->move(0);  
+            world->getPlayer()->move(Entity::EDIR_UP);  
             start_input_timer = std::chrono::system_clock::now();       
         }
         if((glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)) {
-            world->getPlayer()->move(2);  
+            world->getPlayer()->move(Entity::EDIR_LEFT);  
             start_input_timer = std::chrono::system_clock::now();       
         }
         if((glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) {
-            world->getPlayer()->move(1);  
+            world->getPlayer()->move(Entity::EDIR_DOWN);  
             start_input_timer = std::chrono::system_clock::now();       
         }
         if((glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)) {
-            world->getPlayer()->move(3);  
+            world->getPlayer()->move(Entity::
+            EDIR_RIGHT);  
             start_input_timer = std::chrono::system_clock::now();       
         }
     }

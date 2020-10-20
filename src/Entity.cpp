@@ -37,7 +37,7 @@ Entity::Entity(float _x, float _y, std::string type, float* _vertices) : Tile(_x
     }
 }
 
-bool Entity::move(int mode) {
+bool Entity::move(E_DIRECTION direction) {
     float modX;
     float modY;
     Tile* tile;
@@ -47,8 +47,8 @@ bool Entity::move(int mode) {
         return false;
     }
 
-    switch(mode) {
-        case 0:
+    switch(direction) {
+        case EDIR_UP:
             modX = floor(x);
             modY = floor(y+1);
             tile = world->getTilePointer(modX, modY);
@@ -68,7 +68,7 @@ bool Entity::move(int mode) {
             }else {
                 return false;
             }
-        case 1:
+        case EDIR_DOWN:
             modX = floor(x);
             modY = floor(y-1);
             tile = world->getTilePointer(modX, modY);
@@ -87,7 +87,7 @@ bool Entity::move(int mode) {
             }else {
                 return false;
             }
-        case 2:
+        case EDIR_LEFT:
             modX = floor(x-1);
             modY = floor(y);
             tile = world->getTilePointer(modX, modY);
@@ -106,7 +106,7 @@ bool Entity::move(int mode) {
             }else {
                 return false;
             }
-        case 3:
+        case EDIR_RIGHT:
             modX = floor(x+1);
             modY = floor(y);
             tile = world->getTilePointer(modX, modY);
