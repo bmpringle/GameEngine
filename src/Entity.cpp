@@ -43,6 +43,10 @@ bool Entity::move(int mode) {
     Tile* tile;
     Tile* tile1 = world->getTilePointer(x, y);;
 
+    if(world->isShowingTextBox()) {
+        return false;
+    }
+
     switch(mode) {
         case 0:
             modX = floor(x);

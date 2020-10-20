@@ -5,6 +5,7 @@
 #include<iostream>
 #include"Init.h"
 #include<functional>
+#include<chrono>
 
 class Entity;
 class World;
@@ -24,6 +25,8 @@ class Tile {
         Tile(float _x, float _y, std::string type, std::vector<float> _vertices);
 
         void loadTexture(std::string asset);
+
+        void loadTexture(unsigned char* data, int width, int height, int nrChannels);
 
         void unloadTexture();
 
@@ -91,6 +94,10 @@ class Tile {
 
         void update();
 
+        void showAndHideTextBoxOnInteraction(std::string text);
+
+        void setUV(std::vector<float> uvIn);
+
     protected:
         unsigned int VAO;
         unsigned int VBOV, VBOC, VBOT;
@@ -104,6 +111,8 @@ class Tile {
         float gBase = 1;
         float bBase = 1;
         std::vector<float> vertices = std::vector<float>();
+        std::vector<float> uv = std::vector<float>();
+
         std::vector<Tile> attachments = std::vector<Tile>();
 
         //size should never be greater than 1. vector is used as a wrapper to allow a tile to be in a tile.
@@ -116,6 +125,11 @@ class Tile {
         std::vector<Tile> attachementToShowAndHideOnInteraction = std::vector<Tile>();
         bool showInterAttach = false;
         std::chrono::system_clock::time_point start_buffer_show_timer = std::chrono::system_clock::now();
+
+        //used to hold textboxbehavior
+        std::string interactionText = "";
+        bool hasTextBoxInteractionBehavior = false;
+        std::chrono::system_clock::time_point start_interaction_textbox_close_timer = std::chrono::system_clock::now();
 
     private:
         

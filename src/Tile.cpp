@@ -92,9 +92,20 @@ bool Tile::getPermissable(int direction) {
 void Tile::render(int program, float unitsToNormal, float _x, float _y) {
     float tempvertices[vertices.size()];
 
+    if(uv.size() == 0) {
+        uv.push_back(0); uv.push_back(0); uv.push_back(1); uv.push_back(0); uv.push_back(1); uv.push_back(1); uv.push_back(0); uv.push_back(0); uv.push_back(0); uv.push_back(1); uv.push_back(1); uv.push_back(1);
+    }
+
+    float tempuv[uv.size()];
+
     for(int i=0; i<vertices.size(); ++i) {
         tempvertices[i] = vertices[i];
     }
+
+    for(int i=0; i<uv.size(); ++i) {
+        tempuv[i] = uv[i];
+    }
+
 
     float colors[] = {
         rBase, gBase, bBase, 1,
@@ -103,15 +114,6 @@ void Tile::render(int program, float unitsToNormal, float _x, float _y) {
         rBase, gBase, bBase, 1,
         rBase, gBase, bBase, 1,
         rBase, gBase, bBase, 1,     
-    };
-
-    float uv[] = {
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 0,
-        0, 1,
-        1, 1
     };
 
     for(int i = 0; i<vertices.size(); i+=3) {
@@ -136,7 +138,7 @@ void Tile::render(int program, float unitsToNormal, float _x, float _y) {
 
     if(hasTexture) {
         glBindBuffer(GL_ARRAY_BUFFER, VBOT);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(uv), uv, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(tempuv), tempuv, GL_DYNAMIC_DRAW);
     }
 
     glUseProgram(program);
@@ -169,6 +171,33 @@ void Tile::loadTexture(std::string asset) {
     int width, height, nrChannels;
     unsigned char *data = stbi_load(("src/assets/"+asset).c_str(), &width, &height, &nrChannels, 0); 
     //stbi_write_png(("src/assets/"+asset).c_str(), width, height, nrChannels, data, width*nrChannels);
+
+    if(data  == nullptr) abort();
+
+    glBindVertexArray(VAO);
+
+    glGenTextures(1, &TBO);
+
+    glBindTexture(GL_TEXTURE_2D, TBO); 
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    if(nrChannels == 3) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    }else {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    }
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindVertexArray(0);
+
+    hasTexture = true;
+}
+
+//should be formatted as GL_RGB
+void Tile::loadTexture(unsigned char* data, int width, int height, int nrChannels) {   
 
     if(data  == nullptr) abort();
 
@@ -257,6 +286,12 @@ void Tile::interactionOn(Entity* e) {
         showInterAttach = !showInterAttach;
         start_buffer_show_timer = std::chrono::system_clock::now();
     }
+
+    elapsed_seconds = std::chrono::system_clock::now()-start_interaction_textbox_close_timer;
+    if(hasTextBoxInteractionBehavior && elapsed_seconds.count() > 0.5) {
+        world->toggleTextBox(interactionText);
+        start_interaction_textbox_close_timer = std::chrono::system_clock::now();
+    }
 }
 
 void Tile::renderAttachments(int program, float unitsToNormal, int _x, int _y) {
@@ -302,4 +337,13 @@ void Tile::showAttachmentOnInteractionTimed(Tile a, float time) {
         attachementToShowOnInteractionTimed[0] = a;
     }
     timeToShow = time;
+}
+
+void Tile::showAndHideTextBoxOnInteraction(std::string text) {
+    hasTextBoxInteractionBehavior = true;
+    interactionText = text;
+}
+
+void Tile::setUV(std::vector<float> uvIn) {
+    uv = uvIn;
 }
