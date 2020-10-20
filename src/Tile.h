@@ -52,33 +52,32 @@ class Tile {
 
         bool hasTexture = false;
 
+        enum E_DIRECTION {
+            EDIR_UP     = 0,
+            EDIR_DOWN   = 1,
+            EDIR_LEFT   = 2,
+            EDIR_RIGHT  = 3,
+            EDIR_NUM    = 4
+        };
+
         /*
         parameters: 
-            int direction:
-                0: up
-                1: down
-                2: left
-                3: right
+            E_DIRECTION direction:
             bool option:
                 true: permissable
                 false: not permissable
         */
-        void setPermissable(int direction, bool option);
-
+        void setPermissable(E_DIRECTION direction, bool option);
 
         /*
         parameters: 
-            int direction:
-                0: up
-                1: down
-                2: left
-                3: right
+            E_DIRECTION direction:
         return:    
             bool:
                 true: permissable
                 false: not permissable
         */
-        bool getPermissable(int direction);
+        bool getPermissable(E_DIRECTION direction);
 
         void setType(std::string _type);
 

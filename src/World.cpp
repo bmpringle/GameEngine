@@ -213,18 +213,18 @@ void World::parseWorld(std::string world) {
                 std::string behavior = lineToks[TOK_PARAM(1)];
                 if(behavior == "permissable") {
                     std::string nsew = lineToks[TOK_PARAM(2)];
-                    int direction = 0;
+                    Tile::E_DIRECTION direction = Tile::EDIR_UP;
                     if(nsew == "up") {
-                        direction = 0;
+                        direction = Tile::EDIR_UP;
                     }
                     if(nsew == "down") {
-                        direction = 1;
+                        direction =  Tile::EDIR_DOWN;
                     }
                     if(nsew == "left") {
-                        direction = 2;
+                        direction = Tile::EDIR_LEFT;
                     }
                     if(nsew == "right") {
-                        direction = 3;
+                        direction = Tile::EDIR_RIGHT;
                     }
                     std::string truefalse = lineToks[TOK_PARAM(3)];
                     bool rTrueFalse = false;

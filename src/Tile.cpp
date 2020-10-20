@@ -81,11 +81,11 @@ Tile::Tile(float _x, float _y, std::string _type) {
     }
 }
 
-void Tile::setPermissable(int direction, bool option) {
+void Tile::setPermissable(E_DIRECTION direction, bool option) {
     permissable[direction] = option;
 }
 
-bool Tile::getPermissable(int direction) {
+bool Tile::getPermissable(E_DIRECTION direction) {
     return permissable[direction];
 }
 

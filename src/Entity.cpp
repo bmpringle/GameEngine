@@ -54,17 +54,17 @@ bool Entity::move(E_DIRECTION direction) {
             tile = world->getTilePointer(modX, modY);
 
             if(tile != nullptr) {
-                if(tile->getPermissable(1)) {
+                if(tile->getPermissable(EDIR_DOWN)) {
                     if(tile1 != nullptr) {
-                        if(tile1->getPermissable(0)) {
+                        if(tile1->getPermissable(EDIR_UP)) {
                             ++y;
                         }
-                        return tile1->getPermissable(0);
+                        return tile1->getPermissable(EDIR_UP);
                     }else {
                         return false;
                     }
                 }
-                return tile->getPermissable(1);
+                return tile->getPermissable(EDIR_DOWN);
             }else {
                 return false;
             }
@@ -73,17 +73,17 @@ bool Entity::move(E_DIRECTION direction) {
             modY = floor(y-1);
             tile = world->getTilePointer(modX, modY);
             if(tile != nullptr) {
-                if(tile->getPermissable(0)) {
+                if(tile->getPermissable(EDIR_UP)) {
                     if(tile1 != nullptr) {
-                        if(tile1->getPermissable(1)) {
+                        if(tile1->getPermissable(EDIR_DOWN)) {
                             --y;
                         }
-                        return tile1->getPermissable(1);
+                        return tile1->getPermissable(EDIR_DOWN);
                     }else {
                         return false;
                     }
                 }
-                return tile->getPermissable(0);
+                return tile->getPermissable(EDIR_UP);
             }else {
                 return false;
             }
@@ -92,17 +92,17 @@ bool Entity::move(E_DIRECTION direction) {
             modY = floor(y);
             tile = world->getTilePointer(modX, modY);
             if(tile != nullptr) {
-                if(tile->getPermissable(3)) {
+                if(tile->getPermissable(EDIR_RIGHT)) {
                     if(tile1 != nullptr) {
-                        if(tile1->getPermissable(2)) {
+                        if(tile1->getPermissable(EDIR_LEFT)) {
                             --x;
                         }
-                        return tile1->getPermissable(2);
+                        return tile1->getPermissable(EDIR_LEFT);
                     }else {
                         return false;
                     }
                 }
-                return tile->getPermissable(3);
+                return tile->getPermissable(EDIR_RIGHT);
             }else {
                 return false;
             }
@@ -111,17 +111,17 @@ bool Entity::move(E_DIRECTION direction) {
             modY = floor(y);
             tile = world->getTilePointer(modX, modY);
             if(tile != nullptr) {
-                if(tile->getPermissable(2)) {
+                if(tile->getPermissable(EDIR_LEFT)) {
                     if(tile1 != nullptr) {
-                        if(tile1->getPermissable(3)) {
+                        if(tile1->getPermissable(EDIR_RIGHT)) {
                             ++x;
                         }
-                        return tile1->getPermissable(3);
+                        return tile1->getPermissable(EDIR_RIGHT);
                     }else {
                         return false;
                     }
                 }
-                return tile->getPermissable(2);
+                return tile->getPermissable(EDIR_LEFT);
             }else {
                 return false;
             }

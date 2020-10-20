@@ -11,15 +11,6 @@ class Entity : public Tile {
         Entity(float _x, float _y, float* _vertices);
 
         Entity(float _x, float _y, std::string type, float* _vertices);
-
-        enum E_DIRECTION {
-            EDIR_UP     = 0,
-            EDIR_DOWN   = 1,
-            EDIR_LEFT   = 2,
-            EDIR_RIGHT  = 3,
-            EDIR_NUM    = 4
-        };
-
         /*
         parameters: 
             E_DIRECTION direction:
