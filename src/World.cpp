@@ -142,15 +142,19 @@ void World::render(int program, int texprogram) {
         player.render(program, unitToNormal);
     }
     if(showTextbox) {
-        if(textbox.hasTexture) {
-            textbox.render(texprogram, unitToNormal);
-            textbox.renderAttachments(texprogram, unitToNormal, 0, 0);
-        }else {
-            textbox.render(program, unitToNormal);
-            textbox.renderAttachments(program, unitToNormal, 0, 0);
-        }
+        renderTextBox();
     }
     player.setPos(x, y);
+}
+
+void World::renderTextBox(int program, int texprogram) {
+    if(textbox.hasTexture) {
+        textbox.render(texprogram, unitToNormal);
+        textbox.renderAttachments(texprogram, unitToNormal, 0, 0);
+    }else {
+        textbox.render(program, unitToNormal);
+        textbox.renderAttachments(program, unitToNormal, 0, 0);
+    }
 }
 
 Tile* World::getTilePointer(float x, float y) {
@@ -417,6 +421,7 @@ void World::toggleTextBox(std::string text) {
     std::cout << textBoxBeginningX << " " << textBoxBeginningY << std::endl;
 
     float textBoxLength = 2.0/unitToNormal-(10.0/1024.0)*2.0/unitToNormal-2*size;
+    float textBoxEndY = -1/(unitToNormal) + (10.0/128.0)*texelOffset + (10.0/128.0)*1/(unitToNormal*2);
 
     float i = 0;
     float j = 0;
@@ -429,6 +434,7 @@ void World::toggleTextBox(std::string text) {
             int index = lettersToNumbers.at(character);
             Character t = characters[index];
             t.setPos(textBoxBeginningX+i, textBoxBeginningY-j, -5);
+
             textbox.addAttachment(t);
             if(i >= textBoxLength-size) {
                 i = -spaceSize;

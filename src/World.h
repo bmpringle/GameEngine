@@ -49,5 +49,7 @@ class World {
         bool showTextbox = false;
         std::vector<Character> characters = std::vector<Character>();
         std::map<char, int> lettersToNumbers = std::map<char, int>();        
+
+        void renderTextBox(int program, int textprogram);
 };
 #endif
