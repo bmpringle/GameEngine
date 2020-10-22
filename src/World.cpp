@@ -14,8 +14,8 @@ void createCharacters(std::vector<Character>* characters) {
     characters->push_back(Character({207, 52,  232, 52,  232, 10, 207, 52, 207, 10,  232, 10}, "F"));
     characters->push_back(Character({238, 52,  275, 52,  275, 10, 238, 52, 238, 10,  275, 10}, "G"));
     characters->push_back(Character({285, 52,  318, 52,  318, 10, 285, 52, 285, 10,  318, 10}, "H"));
-    characters->push_back(Character({329, 52,  336, 52,  336, 10, 329, 52, 329, 10,  336, 10}, "I", {3.0/8, 0, 0, 5.0/8, 0, 0, 5.0/8, 1, 0, 3.0/8, 0, 0, 3.0/8, 1, 0, 5.0/8, 1, 0}));
-    characters->push_back(Character({338, 64,  353, 64,  353, 10, 338, 64, 338, 10,  353, 10}, "J", {2.0/8, 0, 0, 6.0/8, 0, 0, 6.0/8, 1, 0, 2.0/8, 0, 0, 2.0/8, 1, 0, 6.0/8, 1, 0}));
+    characters->push_back(Character({329, 52,  336, 52,  336, 10, 329, 52, 329, 10,  336, 10}, "I"));
+    characters->push_back(Character({338, 64,  353, 64,  353, 10, 338, 64, 338, 10,  353, 10}, "J"));
     characters->push_back(Character({363, 52,  397, 52,  397, 10, 363, 52, 363, 10,  397, 10}, "K"));
     characters->push_back(Character({401, 52,  428, 52,  428, 10, 401, 52, 401, 10,  428, 10}, "L"));
     characters->push_back(Character({433, 52,  473, 52,  473, 10, 433, 52, 433, 10,  473, 10}, "M"));
@@ -75,6 +75,24 @@ World::World() {
     player.world = this;
 
     createCharacters(&characters);
+
+    char letter = 'A';
+
+    for(int i = 0; i<26; ++i) {
+        lettersToNumbers.insert(std::make_pair(letter, i));
+        letter = (char)((int)letter + 1);
+    }
+
+    letter = 'a';
+    for(int i = 26; i<52; ++i) {
+        lettersToNumbers.insert(std::make_pair(letter, i));
+        letter = (char)((int)letter + 1);
+    }
+    lettersToNumbers.insert(std::make_pair('.', 52));
+    lettersToNumbers.insert(std::make_pair('!', 53));
+    lettersToNumbers.insert(std::make_pair(',', 54));
+    lettersToNumbers.insert(std::make_pair('?', 55));
+    lettersToNumbers.insert(std::make_pair('"', 56));
 }
 
 void World::addTile(Tile t) {
@@ -381,6 +399,25 @@ void World::toggleTextBox(std::string text) {
     std::vector<Tile>* tiles = textbox.getAttachments();
     tiles = nullptr;
 
+    float size = characters[0].size;
+
+    float spacing = 0.2;
+
+    //size of space - size of a char / 5
+    float spaceSize = size*(1+spacing);
+
+    float returnSize = size*(1+spacing);
+
+    float texelOffset = 0.05;
+
+    //calcuating the top-left of the white area of the textbox
+    float textBoxBeginningX = -1.0/unitToNormal+(10.0/1024.0)*2.0/unitToNormal;
+    float textBoxBeginningY = -1/(unitToNormal)-(10.0/128.0)*1/(unitToNormal*2)+1/(unitToNormal*2)-size-(10.0/128.0)*texelOffset;
+
+    std::cout << textBoxBeginningX << " " << textBoxBeginningY << std::endl;
+
+    float textBoxLength = 2.0/unitToNormal-(10.0/1024.0)*2.0/unitToNormal-2*size;
+
     float i = 0;
     float j = 0;
 
@@ -389,20 +426,20 @@ void World::toggleTextBox(std::string text) {
     for(char character : text) {
 
         if(character != ' ' && character != '\\' && !(option && character == 'n')) {
-            int index = toggleTextHelper(character);
+            int index = lettersToNumbers.at(character);
             Character t = characters[index];
-            t.setPos(-4.76+i, -3.3-j, -5);
+            t.setPos(textBoxBeginningX+i, textBoxBeginningY-j, -5);
             textbox.addAttachment(t);
-            if(i >= 9) {
-                i = -0.4;
-                j+=0.4;;
+            if(i >= textBoxLength-size) {
+                i = -spaceSize;
+                j+=returnSize;
             }
-            i+=0.4;
+            i+=spaceSize;
         }
 
         if(character == 'n' && option) {
-            j+=0.4;
-            i = -0.4;
+            j+=returnSize;
+            i = -spaceSize;
         }
 
         option = false;
@@ -411,125 +448,15 @@ void World::toggleTextBox(std::string text) {
         }
 
         if(character == ' ') {
-            if(i >= 9) {
-                i = -0.4;
-                j+=0.4;;
+            if(i >= textBoxLength-size) {
+                i = -spaceSize;
+                j+=returnSize;
             }
-            i+=0.4;
+            i+=spaceSize;
         }
     }
 }
 
 bool World::isShowingTextBox() {
     return showTextbox;
-}
-
-int World::toggleTextHelper(char character) {
-    switch(character) {
-        case 'A':
-            return 0;
-        case 'B':
-            return 1;
-        case 'C':
-            return 2;
-        case 'D':
-            return 3;
-        case 'E':
-            return 4;
-        case 'F':
-            return 5;
-        case 'G':
-            return 6;
-        case 'H':
-            return 7;
-        case 'I':
-            return 8;
-        case 'J':
-            return 9;
-        case 'K':
-            return 10;
-        case 'L':
-            return 11;
-        case 'M':
-            return 12;
-        case 'N':
-            return 13;
-        case 'O':
-            return 14;
-        case 'P':
-            return 15;
-        case 'Q':
-            return 16;
-        case 'R':
-            return 17;
-        case 'S':
-            return 18;
-        case 'T':
-            return 19;
-        case 'U':
-            return 20;
-        case 'V':
-            return 21;
-        case 'W':
-            return 22;
-        case 'X':
-            return 23;
-        case 'Y':
-            return 24;
-        case 'Z':
-            return 25;
-        case 'a':
-            return 26;
-        case 'b':
-            return 27;
-        case 'c':
-            return 28;
-        case 'd':
-            return 29;
-        case 'e':
-            return 30;
-        case 'f':
-            return 31;
-        case 'g':
-            return 32;
-        case 'h':
-            return 33;
-        case 'i':
-            return 34;
-        case 'j':
-            return 35;
-        case 'k':
-            return 36;
-        case 'l':
-            return 37;
-        case 'm':
-            return 38;
-        case 'n':
-            return 39;
-        case 'o':
-            return 40;
-        case 'p':
-            return 41;
-        case 'q':
-            return 42;
-        case 'r':
-            return 43;
-        case 's':
-            return 44;
-        case 't':
-            return 45;
-        case 'u':
-            return 46;
-        case 'v':
-            return 47;
-        case 'w':
-            return 48;
-        case 'x':
-            return 49;
-        case 'y':
-            return 50;
-        case 'z':
-            return 51;
-    }
-    return 0;
 }

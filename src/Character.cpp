@@ -9,10 +9,21 @@ Character::Character(std::vector<float> uvIn, std::string typeName) : Tile(0, 0,
         uv.push_back((1024.0-uvIn[i+1])/1024.0);
     }
     loadTexture();
-    for(int i=0; i<vertices.size(); i+=3) {
-        vertices[i] = vertices[i]/3;
-        vertices[i+1] = vertices[i+1]/3;
-        vertices[i+2] = vertices[i+2];
+
+    if(typeName != "I" && typeName != "J") {
+        for(int i=0; i<vertices.size(); i+=3) {
+            vertices[i] = vertices[i]*size;
+            vertices[i+1] = vertices[i+1]*size;
+            vertices[i+2] = vertices[i+2];
+        }   
+    }
+
+    if(typeName == "I" || typeName == "J") {
+        for(int i=0; i<vertices.size(); i+=3) {
+            vertices[i] = vertices[i]*size*((typeName == "I") ? 1.0/4.0 : 1.0/2.0);
+            vertices[i+1] = vertices[i+1]*size;
+            vertices[i+2] = vertices[i+2];
+        }         
     }
 }
 
@@ -25,10 +36,21 @@ Character::Character(std::vector<float> uvIn, std::string typeName, std::vector<
     }
     vertices = _vertices;
     loadTexture();
-    for(int i=0; i<vertices.size(); i+=3) {
-        vertices[i] = vertices[i]/3;
-        vertices[i+1] = vertices[i+1]/3;
-        vertices[i+2] = vertices[i+2];
+
+    if(typeName != "I" && typeName != "J") {
+        for(int i=0; i<vertices.size(); i+=3) {
+            vertices[i] = vertices[i]*size;
+            vertices[i+1] = vertices[i+1]*size;
+            vertices[i+2] = vertices[i+2];
+        }   
+    }
+
+    if(typeName == "I" || typeName == "J") {
+        for(int i=0; i<vertices.size(); i+=3) {
+            vertices[i] = vertices[i]*size*((typeName == "I") ? 1.0/3.0 : 1.0/2.0);
+            vertices[i+1] = vertices[i+1]*size;
+            vertices[i+2] = vertices[i+2];
+        }         
     }
 }
 

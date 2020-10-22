@@ -5,6 +5,7 @@
 #include"Entity.h"
 #include<chrono>
 #include"Character.h"
+#include<map>
 
 class World {
     public:   
@@ -44,10 +45,9 @@ class World {
         float unitToNormal = 1.0/5.0;
         Entity player = Entity(0, 0);
 
-        Tile textbox = Tile(0, 0, "textbox", {-5, -5, -4, 5, -5, -4, 5, -2.5, -4, -5, -5, -4, -5, -2.5, -4, 5, -2.5, -4});
+        Tile textbox = Tile(0, 0, "textbox", {-1/unitToNormal, -1/unitToNormal, -4, 1/unitToNormal, -1/unitToNormal, -4, 1/unitToNormal, -1/(unitToNormal*2), -4, -1/unitToNormal, -1/unitToNormal, -4, -1/unitToNormal, -1/(unitToNormal*2), -4, 1/unitToNormal, -1/(unitToNormal*2), -4});
         bool showTextbox = false;
         std::vector<Character> characters = std::vector<Character>();
-
-        int toggleTextHelper(char character);
+        std::map<char, int> lettersToNumbers = std::map<char, int>();        
 };
 #endif

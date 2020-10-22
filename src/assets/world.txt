@@ -122,6 +122,5 @@ addBehavior tableWithMug showAttachmentOnInteractionTimed mug 2 -0.2, 0, -1
 
 addBehavior tableWithMug showAndHideAttachmentOnInteraction mug 0.1, 0, -1
 
-addBehavior tableWithMug showAndHideTextBoxOnInteraction HI MY NAME IS BEN \n HOW ARE YOU
-
+addBehavior tableWithMug showAndHideTextBoxOnInteraction ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ
 place tableWithMug 0 4

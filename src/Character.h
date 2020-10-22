@@ -2,6 +2,7 @@
 
 class Character : public Tile {
     public:
+        float size = (108.0/128.0)/4.0;
         std::string characterAtlas;
         unsigned char* data;
         int width, height, nrChannels;
