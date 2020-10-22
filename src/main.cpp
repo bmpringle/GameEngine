@@ -46,9 +46,13 @@ void processInput(GLFWwindow *window, World* world) {
         }
         if((glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) ||
            (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)) {
-            world->getPlayer()->move(Entity::
-            EDIR_RIGHT);  
+            world->getPlayer()->move(Entity::EDIR_RIGHT);  
             start_input_timer = std::chrono::system_clock::now();       
+        }
+
+        if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS) {
+            world->cycleTextOffset();
+            start_input_timer = std::chrono::system_clock::now();
         }
     }
     if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {

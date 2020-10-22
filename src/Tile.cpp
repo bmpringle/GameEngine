@@ -293,7 +293,7 @@ void Tile::interactionOn(Entity* e) {
 
     elapsed_seconds = std::chrono::system_clock::now()-start_interaction_textbox_close_timer;
     if(hasTextBoxInteractionBehavior && elapsed_seconds.count() > 0.5) {
-        world->toggleTextBox(interactionText);
+        world->showTextBox(interactionText, !world->isShowingTextBox());
         start_interaction_textbox_close_timer = std::chrono::system_clock::now();
     }
 }

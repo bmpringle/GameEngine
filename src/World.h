@@ -35,9 +35,11 @@ class World {
 
         Entity* getEntityPointer(float x, float y);
 
-        void toggleTextBox(std::string text);
+        void showTextBox(std::string text, bool show);
 
         bool isShowingTextBox();
+
+        void cycleTextOffset();
 
     private:
         std::vector<Tile> tiles = std::vector<Tile>();
@@ -46,6 +48,11 @@ class World {
         Entity player = Entity(0, 0);
 
         Tile textbox = Tile(0, 0, "textbox", {-1/unitToNormal, -1/unitToNormal, -4, 1/unitToNormal, -1/unitToNormal, -4, 1/unitToNormal, -1/(unitToNormal*2), -4, -1/unitToNormal, -1/unitToNormal, -4, -1/unitToNormal, -1/(unitToNormal*2), -4, 1/unitToNormal, -1/(unitToNormal*2), -4});
+        std::string textDisplayed = "";
+        float yMin = 0;
+        float yMax = 0;
+        float textOffset = 0;
+        
         bool showTextbox = false;
         std::vector<Character> characters = std::vector<Character>();
         std::map<char, int> lettersToNumbers = std::map<char, int>();        

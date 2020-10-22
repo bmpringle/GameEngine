@@ -142,18 +142,27 @@ void World::render(int program, int texprogram) {
         player.render(program, unitToNormal);
     }
     if(showTextbox) {
-        renderTextBox();
+        renderTextBox(program, texprogram);
     }
     player.setPos(x, y);
 }
 
 void World::renderTextBox(int program, int texprogram) {
+
+    for(int i=0; i<textbox.getAttachments()->size(); ++i) {
+        textbox.getAttachments()->at(i).changePos(0, this->textOffset);
+    }
+
     if(textbox.hasTexture) {
         textbox.render(texprogram, unitToNormal);
         textbox.renderAttachments(texprogram, unitToNormal, 0, 0);
     }else {
         textbox.render(program, unitToNormal);
         textbox.renderAttachments(program, unitToNormal, 0, 0);
+    }
+
+    for(int i=0; i<textbox.getAttachments()->size(); ++i) {
+        textbox.getAttachments()->at(i).changePos(0, -this->textOffset);
     }
 }
 
@@ -395,74 +404,115 @@ void World::update() {
     player.update();
 }
 
-void World::toggleTextBox(std::string text) {
+void World::showTextBox(std::string text, bool show) {
     textbox.world = this;
     textbox.loadTexture("textbox.png");
-    showTextbox = !showTextbox;
+    showTextbox = show;
+    textDisplayed = text;
 
-    std::vector<Tile>* tiles = textbox.getAttachments();
-    tiles = nullptr;
+    if(show != false) {
+        std::vector<Tile>* tiles = textbox.getAttachments();
+        tiles = nullptr;
 
-    float size = characters[0].size;
+        float size = characters[0].size;
 
-    float spacing = 0.2;
+        float spacing = 0.2;
 
-    //size of space - size of a char / 5
-    float spaceSize = size*(1+spacing);
+        //size of space - size of a char / 5
+        float spaceSize = size*(1+spacing);
 
-    float returnSize = size*(1+spacing);
+        float returnSize = size*(1+spacing);
 
-    float texelOffset = 0.05;
+        float texelOffset = 0.05;
 
-    //calcuating the top-left of the white area of the textbox
-    float textBoxBeginningX = -1.0/unitToNormal+(10.0/1024.0)*2.0/unitToNormal;
-    float textBoxBeginningY = -1/(unitToNormal)-(10.0/128.0)*1/(unitToNormal*2)+1/(unitToNormal*2)-size-(10.0/128.0)*texelOffset;
+        //calcuating the top-left of the white area of the textbox
+        float textBoxBeginningX = -1.0/unitToNormal+(10.0/1024.0)*2.0/unitToNormal;
+        float textBoxBeginningY = -1/(unitToNormal)-(10.0/128.0)*1/(unitToNormal*2)+1/(unitToNormal*2)-size-(10.0/128.0)*texelOffset;
 
-    std::cout << textBoxBeginningX << " " << textBoxBeginningY << std::endl;
+        float textBoxLength = 2.0/unitToNormal-(10.0/1024.0)*2.0/unitToNormal-2*size;
+        float textBoxEndY = -1/(unitToNormal) + (10.0/128.0)*texelOffset + (10.0/128.0)*1/(unitToNormal*2);
 
-    float textBoxLength = 2.0/unitToNormal-(10.0/1024.0)*2.0/unitToNormal-2*size;
-    float textBoxEndY = -1/(unitToNormal) + (10.0/128.0)*texelOffset + (10.0/128.0)*1/(unitToNormal*2);
+        float i = 0;
+        float j = 0;
 
-    float i = 0;
-    float j = 0;
+        bool option = false;
 
-    bool option = false;
+        for(char character : text) {
 
-    for(char character : text) {
+            if(character != ' ' && character != '\\' && !(option && character == 'n')) {
+                int index = lettersToNumbers.at(character);
+                Character t = characters[index];
+                t.setPos(textBoxBeginningX+i, textBoxBeginningY-j, -5);
 
-        if(character != ' ' && character != '\\' && !(option && character == 'n')) {
-            int index = lettersToNumbers.at(character);
-            Character t = characters[index];
-            t.setPos(textBoxBeginningX+i, textBoxBeginningY-j, -5);
+                textbox.addAttachment(t);
+                if(i >= textBoxLength-size) {
+                    i = -spaceSize;
+                    j+=returnSize;
+                }
+                i+=spaceSize;
+            }
 
+            if(character == 'n' && option) {
+                j+=returnSize;
+                i = -spaceSize;
+            }
+
+            option = false;
+            if(character == '\\') {
+                option = true;
+            }
+
+            if(character == ' ') {
+                if(i >= textBoxLength-size) {
+                    i = -spaceSize;
+                    j+=returnSize;
+                }
+                i+=spaceSize;
+            }
+        }
+
+        std::vector<Tile> validAttachments = std::vector<Tile>();
+
+        float largestYNotAllowed = -9999;
+
+        for(int i=0; i<textbox.getAttachments()->size(); ++i) {
+            if(textbox.getAttachments()->at(i).getY()+textOffset >= textBoxEndY && textbox.getAttachments()->at(i).getY()+textOffset <= textBoxBeginningY) {
+                validAttachments.push_back(textbox.getAttachments()->at(i));
+            }else if(textbox.getAttachments()->at(i).getY()+textOffset <= textBoxBeginningY){
+                if(largestYNotAllowed < textbox.getAttachments()->at(i).getY()) {
+                    largestYNotAllowed = textbox.getAttachments()->at(i).getY();
+                }
+            }
+        }
+
+        textbox.getAttachments()->clear();
+        for(Tile t : validAttachments) {
             textbox.addAttachment(t);
-            if(i >= textBoxLength-size) {
-                i = -spaceSize;
-                j+=returnSize;
-            }
-            i+=spaceSize;
         }
 
-        if(character == 'n' && option) {
-            j+=returnSize;
-            i = -spaceSize;
+        if(textbox.getAttachments()->size() == 0) {
+            showTextBox("", false);
         }
 
-        option = false;
-        if(character == '\\') {
-            option = true;
+        if(largestYNotAllowed == -9999) {
+            yMin = -1/unitToNormal;
+        }else {
+            yMin = largestYNotAllowed+textOffset;
         }
-
-        if(character == ' ') {
-            if(i >= textBoxLength-size) {
-                i = -spaceSize;
-                j+=returnSize;
-            }
-            i+=spaceSize;
-        }
+        yMax = textBoxBeginningY;
+    }else {
+        textOffset = 0;
+        yMin = 0;
+        yMax = 0;
+        textDisplayed = "";
     }
 }
 
 bool World::isShowingTextBox() {
     return showTextbox;
+}
+
+void World::cycleTextOffset() {
+    textOffset+=(yMax - yMin);
+    showTextBox(textDisplayed, true);
 }
