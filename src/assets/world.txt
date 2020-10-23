@@ -92,12 +92,6 @@ place twall 2 6
 
 place twall 3 6
 
-place trcorner 4 6
-
-place rwall 4 5
-
-place brcorner 4 4
-
 place bwall 3 4
 
 place bwall 2 4
@@ -124,3 +118,162 @@ addBehavior tableWithMug showAndHideAttachmentOnInteraction mug 0.1, 0, -1
 
 addBehavior tableWithMug showAndHideTextBoxOnInteraction "Hello. This is a thing. \n Yes, this is indeed a thing that has happened \n \n How are you today? \n Cool, I didnt actually care or expect you to answer, and why would you answer a computer? \n Are you crazy? Are you! \n Nah, Im just messing with you. \n Ok, I gtg, bye." \n You finish your riveting conversation with the table and look away. \n . \n . \n . \n . \n Seriously, go away.
 place tableWithMug 0 4
+
+place generic 4 5
+
+place trcorner 4 6
+
+place brcorner 4 4
+
+place twall 5 6
+
+place bwall 5 4
+
+place twall 6 6
+
+place bwall 6 4
+
+place generic 5 5
+
+place generic 6 5
+
+place lwall 7 3
+
+place generic 7 4
+
+place generic 7 5
+
+place generic 7 6
+
+place lwall 7 7
+
+place lwall 7 8
+
+place lwall 7 9
+
+place lwall 7 10
+
+place tlcorner 7 11
+
+place twall 8 11
+
+place twall 9 11
+
+place twall 10 11
+
+place twall 11 11
+
+place twall 12 11
+
+place trcorner 13 11
+
+place rwall 13 10
+
+place rwall 13 9
+
+place rwall 13 8
+
+place rwall 13 7
+
+place rwall 13 6
+
+place rwall 13 5
+
+place rwall 13 4
+
+place rwall 13 3
+
+place rwall 13 2
+
+place rwall 13 1
+
+place rwall 13 0
+
+place brcorner 13 -1
+
+place bwall 12 -1
+
+place bwall 11 -1
+
+place bwall 10 -1
+
+place bwall 9 -1
+
+place bwall 8 -1
+
+place blcorner 7 -1
+
+place lwall 7 0
+
+place lwall 7 1
+
+place lwall 7 2
+
+place generic 8 10
+place generic 8 9
+place generic 8 8
+place generic 8 7
+place generic 8 6
+place generic 8 5
+place generic 8 4
+place generic 8 3
+place generic 8 2
+place generic 8 1
+place generic 8 0
+
+place generic 9 10
+place generic 9 9
+place generic 9 8
+place generic 9 7
+place generic 9 6
+place generic 9 5
+place generic 9 4
+place generic 9 3
+place generic 9 2
+place generic 9 1
+place generic 9 0
+
+place generic 10 10
+place generic 10 9
+place generic 10 8
+place generic 10 7
+place generic 10 6
+place generic 10 5
+place generic 10 4
+place generic 10 3
+place generic 10 2
+place generic 10 1
+place generic 10 0
+
+place generic 11 10
+place generic 11 9
+place generic 11 8
+place generic 11 7
+place generic 11 6
+place generic 11 5
+place generic 11 4
+place generic 11 3
+place generic 11 2
+place generic 11 1
+place generic 11 0
+
+place generic 12 10
+place generic 12 9
+place generic 12 8
+place generic 12 7
+place generic 12 6
+place generic 12 5
+place generic 12 4
+place generic 12 3
+place generic 12 2
+place generic 12 1
+place generic 12 0
+
+createEntity skeleton 0.4 0.15 0 0.6 0.15 0 0.6 0.85 0 0.4 0.15 0 0.4 0.85 0 0.6 0.85 0
+
+loadEntityTexture skeleton player.png
+
+setEntityStats skeleton 20 2 2 1
+
+spawn skeleton 12 5
+

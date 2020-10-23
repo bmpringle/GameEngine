@@ -68,7 +68,7 @@ void createCharacters(std::vector<Character>* characters) {
 }
 
 World::World() {
-    float player_vertices[] = {
+    std::vector<float> player_vertices = {
         0.4, 0.15, 0,
         0.6, 0.15, 0,
         0.6, 0.85, 0,
@@ -76,6 +76,7 @@ World::World() {
         0.4, 0.85, 0,
         0.6, 0.85, 0
     };
+
     player = Entity(0, 0, "player", player_vertices);
     player.loadTexture("player.png");
     player.world = this;
@@ -185,6 +186,7 @@ void World::parseWorld(std::string world) {
     std::ifstream ifs = std::ifstream("src/assets/" + world);
     std::string line;
     std::vector<Tile> data = std::vector<Tile>();
+    std::vector<Entity> entityData = std::vector<Entity>();
 
     while(std::getline(ifs, line)) {
         std::vector<std::string> lineToks;
@@ -199,6 +201,12 @@ void World::parseWorld(std::string world) {
         /*
         * command: create 
         *   parameters: type(required), vertices(optional) 
+        * command: createEntity
+        *   parameters: type(required), vertices(optional)
+        * command: setEntityStats:
+        *   parameters: entity to set stats of, health(float), str(int), def(int), intel(int) 
+        * command: loadEntityTexture
+        *   paramters: entity to load to, asset name
         * command: loadTexture
         *   paramters: tile to load to, asset name 
         * command: addBehavior
@@ -217,6 +225,8 @@ void World::parseWorld(std::string world) {
         * 
         * command: place
         *   paramters: the name of the tile to place, x, y, z, of tile
+        * command: spawn
+        *   parameters: the name of the entity to spawn, x, y, z, of where to spawn it.
         */
         // Parse Line
 
@@ -233,19 +243,59 @@ void World::parseWorld(std::string world) {
                     }
                     Tile t = Tile(0, 0, type, vertices); 
                     data.push_back(t);
-                } else {
+                }else {
                     Tile t = Tile(0, 0, type);
                     t.world = this;
                     data.push_back(t);                   
                 }
-            } else if(lineToks[TOK_CMD] == "loadTexture") {
+            }else if(lineToks[TOK_CMD] == "createEntity") {
+                std::string type = lineToks[TOK_PARAM(0)];
+                if(lineToks.size() > 2) {
+                    std::vector<float> vertices = std::vector<float>();
+                    auto nParams = lineToks.size() - 1;
+                    for(int p = 1; p<nParams; ++p) {
+                        vertices.push_back(std::stof(lineToks[TOK_PARAM(p)]));
+                    }
+                    Entity t = Entity(0, 0, type, vertices); 
+
+                    t.setPermissable(Tile::EDIR_UP, false);
+                    t.setPermissable(Tile::EDIR_DOWN, false);
+                    t.setPermissable(Tile::EDIR_LEFT, false);
+                    t.setPermissable(Tile::EDIR_RIGHT, false);
+
+                    entityData.push_back(t);
+                } else {
+                    Entity t = Entity(0, 0, type);
+                    t.world = this;
+                    entityData.push_back(t);                   
+                }
+            }else if(lineToks[TOK_CMD] == "loadEntityTexture") {
+                std::string textured = lineToks[TOK_PARAM(0)];
+                for(int i=0; i<entityData.size(); ++i) {
+                    if(entityData[i].type == textured) {
+                        entityData[i].loadTexture(lineToks[TOK_PARAM(1)]);
+                    }
+                }
+            }else if(lineToks[TOK_CMD] == "loadTexture") {
                 std::string textured = lineToks[TOK_PARAM(0)];
                 for(int i=0; i<data.size(); ++i) {
                     if(data[i].type == textured) {
                         data[i].loadTexture(lineToks[TOK_PARAM(1)]);
                     }
                 }
-            } else if(lineToks[TOK_CMD] == "addBehavior") {
+            }else if(lineToks[TOK_CMD] == "setEntityStats") {
+                std::string entityName = lineToks[TOK_PARAM(0)];
+                float health = std::stof(lineToks[TOK_PARAM(1)]);
+                int str = std::stof(lineToks[TOK_PARAM(2)]);
+                int def = std::stof(lineToks[TOK_PARAM(3)]);
+                int intel = std::stof(lineToks[TOK_PARAM(4)]);
+
+                for(int i=0; i<entityData.size(); ++i) {
+                    if(entityData[i].type == entityName) {
+                        entityData[i].setStats(health, str, def, intel);
+                    }
+                }
+            }else if(lineToks[TOK_CMD] == "addBehavior") {
                 std::string tileName = lineToks[TOK_PARAM(0)];
                 std::string behavior = lineToks[TOK_PARAM(1)];
                 if(behavior == "permissable") {
@@ -332,7 +382,7 @@ void World::parseWorld(std::string world) {
                         }
                     }
                 }
-            } else if(lineToks[TOK_CMD] == "attach") {
+            }else if(lineToks[TOK_CMD] == "attach") {
                 std::string base = lineToks[TOK_PARAM(0)];
                 std::string attachee = lineToks[TOK_PARAM(1)];
                 std::string tileName = lineToks[TOK_PARAM(2)];
@@ -359,18 +409,30 @@ void World::parseWorld(std::string world) {
                 t.addAttachment(a);
                 data.push_back(t);
 
-            } else if(lineToks[TOK_CMD] == "place") {
+            }else if(lineToks[TOK_CMD] == "place") {
                 Tile p = Tile(0, 0);
                 for(Tile t : data) {
                     if(t.type == lineToks[TOK_PARAM(0)]) {
                         p = t;
                     }
                 }
-                p.setPos(std::stoi(lineToks[TOK_PARAM(1)]), std::stoi(lineToks[TOK_PARAM(2)]), 0);
+                p.setPos(std::stoi(lineToks[TOK_PARAM(1)]), std::stoi(lineToks[TOK_PARAM(2)]));
                 if(lineToks.size() == 5) {
                     p.changePos(0, 0, std::stoi(lineToks[TOK_PARAM(3)]));
                 }
                 addTile(p);
+            }else if(lineToks[TOK_CMD] == "spawn") {
+                Entity e = Entity(0, 0);
+                for(Entity t : entityData) {
+                    if(t.type == lineToks[TOK_PARAM(0)]) {
+                        e = t;
+                    }
+                }
+                e.setPos(std::stoi(lineToks[TOK_PARAM(1)]), std::stoi(lineToks[TOK_PARAM(2)]));
+                if(lineToks.size() == 5) {
+                    e.changePos(0, 0, std::stoi(lineToks[TOK_PARAM(3)]));
+                }
+                addEntity(e);
             }
         }
     }

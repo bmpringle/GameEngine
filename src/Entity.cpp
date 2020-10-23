@@ -16,112 +16,222 @@ Entity::Entity(float _x, float _y, std::string type) : Tile(_x, _y, type) {
     z = -1;
 }
 
-Entity::Entity(float _x, float _y, float* _vertices) : Tile(_x, _y) {
+Entity::Entity(float _x, float _y, std::vector<float> _vertices) : Tile(_x, _y) {
     rBase = 0;
     gBase = 0;
     bBase = 0;
     z = -1;
-
-    for(int i=0; i<18; ++i) {
-        vertices[i] = _vertices[i];
-    }
+    vertices = _vertices;
 }
 
-Entity::Entity(float _x, float _y, std::string type, float* _vertices) : Tile(_x, _y, type) {
+Entity::Entity(float _x, float _y, std::string type, std::vector<float> _vertices) : Tile(_x, _y, type) {
     rBase = 0;
     gBase = 0;
     bBase = 0;
     z = -1;
-    for(int i=0; i<18; ++i) {
-        vertices[i] = _vertices[i];
-    }
+    vertices = _vertices;
 }
 
 bool Entity::move(E_DIRECTION direction) {
-    float modX;
-    float modY;
-    Tile* tile;
-    Tile* tile1 = world->getTilePointer(x, y);;
+
+    
 
     if(world->isShowingTextBox()) {
         return false;
     }
 
+    if(moveTileCheck(direction)) {
+        if(moveEntityCheck(direction)) {
+            switch(direction) {
+                case EDIR_UP:
+                    ++y;
+                    return true;
+                case EDIR_DOWN:
+                    --y;
+                    return true;
+                case EDIR_LEFT:
+                    --x;
+                    return true;
+                case EDIR_RIGHT:
+                    ++x;
+                    return true;
+                default:
+                    return false;
+            }
+        }else {
+            return false;
+        }
+    }else {
+        return false;
+    }
+}
+
+
+bool Entity::moveTileCheck(Tile::E_DIRECTION direction) {
+    float modX;
+    float modY;
+    Tile* tile;
+    Tile* tile1 = world->getTilePointer(x, y);;
+
     switch(direction) {
-        case EDIR_UP:
+        case Tile::EDIR_UP:
             modX = floor(x);
             modY = floor(y+1);
             tile = world->getTilePointer(modX, modY);
 
             if(tile != nullptr) {
-                if(tile->getPermissable(EDIR_DOWN)) {
+                if(tile->getPermissable(Tile::EDIR_DOWN)) {
                     if(tile1 != nullptr) {
-                        if(tile1->getPermissable(EDIR_UP)) {
-                            ++y;
-                        }
-                        return tile1->getPermissable(EDIR_UP);
+                        return tile1->getPermissable(Tile::EDIR_UP);
                     }else {
                         return false;
                     }
                 }
-                return tile->getPermissable(EDIR_DOWN);
+                return tile->getPermissable(Tile::EDIR_DOWN);
             }else {
                 return false;
             }
-        case EDIR_DOWN:
+        case Tile::EDIR_DOWN:
             modX = floor(x);
             modY = floor(y-1);
             tile = world->getTilePointer(modX, modY);
             if(tile != nullptr) {
-                if(tile->getPermissable(EDIR_UP)) {
+                if(tile->getPermissable(Tile::EDIR_UP)) {
                     if(tile1 != nullptr) {
-                        if(tile1->getPermissable(EDIR_DOWN)) {
-                            --y;
-                        }
-                        return tile1->getPermissable(EDIR_DOWN);
+                        return tile1->getPermissable(Tile::EDIR_DOWN);
                     }else {
                         return false;
                     }
                 }
-                return tile->getPermissable(EDIR_UP);
+                return tile->getPermissable(Tile::EDIR_UP);
             }else {
                 return false;
             }
-        case EDIR_LEFT:
+        case Tile::EDIR_LEFT:
             modX = floor(x-1);
             modY = floor(y);
             tile = world->getTilePointer(modX, modY);
             if(tile != nullptr) {
-                if(tile->getPermissable(EDIR_RIGHT)) {
+                if(tile->getPermissable(Tile::EDIR_RIGHT)) {
                     if(tile1 != nullptr) {
-                        if(tile1->getPermissable(EDIR_LEFT)) {
-                            --x;
-                        }
-                        return tile1->getPermissable(EDIR_LEFT);
+                        return tile1->getPermissable(Tile::EDIR_LEFT);
                     }else {
                         return false;
                     }
                 }
-                return tile->getPermissable(EDIR_RIGHT);
+                return tile->getPermissable(Tile::EDIR_RIGHT);
             }else {
                 return false;
             }
-        case EDIR_RIGHT:
+        case Tile::EDIR_RIGHT:
             modX = floor(x+1);
             modY = floor(y);
             tile = world->getTilePointer(modX, modY);
             if(tile != nullptr) {
-                if(tile->getPermissable(EDIR_LEFT)) {
+                if(tile->getPermissable(Tile::EDIR_LEFT)) {
                     if(tile1 != nullptr) {
-                        if(tile1->getPermissable(EDIR_RIGHT)) {
-                            ++x;
-                        }
-                        return tile1->getPermissable(EDIR_RIGHT);
+                        return tile1->getPermissable(Tile::EDIR_RIGHT);
                     }else {
                         return false;
                     }
                 }
-                return tile->getPermissable(EDIR_LEFT);
+                return tile->getPermissable(Tile::EDIR_LEFT);
+            }else {
+                return false;
+            }
+        default:
+            return false;
+    }
+}
+
+bool Entity::moveEntityCheck(Tile::E_DIRECTION direction) {
+    float modX;
+    float modY;
+    Tile* tile;
+    Tile* tile1 = world->getEntityPointer(x, y);;
+
+    switch(direction) {
+        case Tile::EDIR_UP:
+            modX = floor(x);
+            modY = floor(y+1);
+            tile = world->getEntityPointer(modX, modY);
+
+            if(tile == nullptr) {
+                return true;
+            }
+
+            if(tile != nullptr) {
+                if(tile->getPermissable(Tile::EDIR_DOWN)) {
+                    if(tile1 != nullptr) {
+                        return tile1->getPermissable(Tile::EDIR_UP);
+                    }else {
+                        return false;
+                    }
+                }
+                return tile->getPermissable(Tile::EDIR_DOWN);
+            }else {
+                return false;
+            }
+        case Tile::EDIR_DOWN:
+            modX = floor(x);
+            modY = floor(y-1);
+            tile = world->getEntityPointer(modX, modY);
+
+            if(tile == nullptr) {
+                return true;
+            }
+
+            if(tile != nullptr) {
+                if(tile->getPermissable(Tile::EDIR_UP)) {
+                    if(tile1 != nullptr) {
+                        return tile1->getPermissable(Tile::EDIR_DOWN);
+                    }else {
+                        return false;
+                    }
+                }
+                return tile->getPermissable(Tile::EDIR_UP);
+            }else {
+                return false;
+            }
+        case Tile::EDIR_LEFT:
+            modX = floor(x-1);
+            modY = floor(y);
+            tile = world->getEntityPointer(modX, modY);
+
+            if(tile == nullptr) {
+                return true;
+            }
+
+            if(tile != nullptr) {
+                if(tile->getPermissable(Tile::EDIR_RIGHT)) {
+                    if(tile1 != nullptr) {
+                        return tile1->getPermissable(Tile::EDIR_LEFT);
+                    }else {
+                        return false;
+                    }
+                }
+                return tile->getPermissable(Tile::EDIR_RIGHT);
+            }else {
+                return false;
+            }
+        case Tile::EDIR_RIGHT:
+            modX = floor(x+1);
+            modY = floor(y);
+            tile = world->getEntityPointer(modX, modY);
+
+            if(tile == nullptr) {
+                return true;
+            }
+
+            if(tile != nullptr) {
+                if(tile->getPermissable(Tile::EDIR_LEFT)) {
+                    if(tile1 != nullptr) {
+                        return tile1->getPermissable(Tile::EDIR_RIGHT);
+                    }else {
+                        return false;
+                    }
+                }
+                return tile->getPermissable(Tile::EDIR_LEFT);
             }else {
                 return false;
             }
@@ -140,4 +250,34 @@ void Entity::interact() {
     if(t2 != nullptr) t2->interactionOn(this);
     if(t3 != nullptr) t3->interactionOn(this);
     if(t4 != nullptr) t4->interactionOn(this);
+}
+
+void Entity::damage(float dmg) {
+    float ehp = health * (1+def/100.0);
+    float newEHP = ehp - dmg;
+    float newHealth = newEHP/(1+def/100.0);
+    health = newHealth;
+}
+
+float Entity::getHealth() {
+    return health;
+}
+
+int Entity::getStr() {
+    return str;
+}
+
+int Entity::getDef() {
+    return def;
+}
+
+int Entity::getIntel() {
+    return intel;
+}
+
+void Entity::setStats(float health, int str, int def, int intel) {
+    this->health = health;
+    this->str = str;
+    this->def = def;
+    this->intel = intel;
 }
