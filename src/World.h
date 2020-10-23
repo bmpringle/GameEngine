@@ -53,6 +53,9 @@ class World {
         float yMax = 0;
         float textOffset = 0;
         
+        Tile emptyhealthbar = Tile(0, 0, "emptyhealthbar", {-1/unitToNormal, 1/unitToNormal, -4, 0, 1/unitToNormal, -4, 0,  (float)1/(unitToNormal)*(float)0.8, -4, -1/unitToNormal, 1/unitToNormal, -4, -1/unitToNormal,  (float)1/(unitToNormal)*(float)0.8, -4, 0,  (float)1/(unitToNormal)*(float)0.8, -4});
+        Tile healthbar = Tile(0, 0, "healthbar", {-1/unitToNormal, 1/unitToNormal, -5, 0, 1/unitToNormal, -5, 0,  (float)1/(unitToNormal)*(float)0.8, -5, -1/unitToNormal, 1/unitToNormal, -5, -1/unitToNormal,  (float)1/(unitToNormal)*(float)0.8, -5, 0,  (float)1/(unitToNormal)*(float)0.8, -5});
+
         bool showTextbox = false;
         std::vector<Character> characters = std::vector<Character>();
         std::map<char, int> lettersToNumbers = std::map<char, int>();        

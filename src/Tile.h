@@ -97,6 +97,10 @@ class Tile {
 
         void setUV(std::vector<float> uvIn);
 
+        void setVertices(std::vector<float> vertices);
+
+        std::vector<float> getVertices();
+
     protected:
         unsigned int VAO;
         unsigned int VBOV, VBOC, VBOT;

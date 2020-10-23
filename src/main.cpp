@@ -53,6 +53,7 @@ void processInput(GLFWwindow *window, World* world) {
         if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS) {
             world->cycleTextOffset();
             start_input_timer = std::chrono::system_clock::now();
+            world->getPlayer()->damage(1);
         }
     }
     if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {

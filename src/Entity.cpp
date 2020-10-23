@@ -257,6 +257,9 @@ void Entity::damage(float dmg) {
     float newEHP = ehp - dmg;
     float newHealth = newEHP/(1+def/100.0);
     health = newHealth;
+    if(health < 0) {
+        health = 0;
+    }
 }
 
 float Entity::getHealth() {
@@ -275,8 +278,13 @@ int Entity::getIntel() {
     return intel;
 }
 
+float Entity::getMaxHealth() {
+    return maxHealth;
+}
+
 void Entity::setStats(float health, int str, int def, int intel) {
     this->health = health;
+    this->maxHealth = health;
     this->str = str;
     this->def = def;
     this->intel = intel;

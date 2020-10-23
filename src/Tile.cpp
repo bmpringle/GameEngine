@@ -351,3 +351,11 @@ void Tile::showAndHideTextBoxOnInteraction(std::string text) {
 void Tile::setUV(std::vector<float> uvIn) {
     uv = uvIn;
 }
+
+void Tile::setVertices(std::vector<float> vertices) {
+    this->vertices = vertices;
+}
+
+std::vector<float> Tile::getVertices() {
+    return vertices;
+}

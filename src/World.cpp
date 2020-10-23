@@ -81,6 +81,12 @@ World::World() {
     player.loadTexture("player.png");
     player.world = this;
 
+    emptyhealthbar.loadTexture("emptyhealthbar.png");
+    healthbar.loadTexture("healthbar.png");
+    
+    emptyhealthbar.world = this;
+    healthbar.world = this;
+
     createCharacters(&characters);
 
     char letter = 'A';
@@ -150,6 +156,16 @@ void World::render(int program, int texprogram) {
     }
     if(showTextbox) {
         renderTextBox(program, texprogram);
+    }
+    if(emptyhealthbar.hasTexture) {
+        emptyhealthbar.render(texprogram, unitToNormal);
+    }else {
+        emptyhealthbar.render(program, unitToNormal);
+    }
+    if(healthbar.hasTexture) {
+        healthbar.render(texprogram, unitToNormal);
+    }else {
+        healthbar.render(program, unitToNormal);
     }
     player.setPos(x, y);
 }
@@ -470,6 +486,28 @@ void World::update() {
         entities[i].update();
     }
     player.update();
+    std::vector<float> healthbaruv = {
+        0, 0,
+        player.getHealth()/player.getMaxHealth(), 0,
+        player.getHealth()/player.getMaxHealth(), 1,
+        0, 0,
+        0, 1,
+        player.getHealth()/player.getMaxHealth(), 1  
+    };
+
+    std::vector<float> oldhealthbarvertices = healthbar.getVertices();
+
+    std::vector<float> healthbarvertices = {
+        oldhealthbarvertices[0], oldhealthbarvertices[1], oldhealthbarvertices[2], 
+        ((1-player.getHealth()/player.getMaxHealth())*-1/unitToNormal), oldhealthbarvertices[4], oldhealthbarvertices[5], 
+        ((1-player.getHealth()/player.getMaxHealth())*-1/unitToNormal), oldhealthbarvertices[7], oldhealthbarvertices[8],
+        oldhealthbarvertices[9], oldhealthbarvertices[10], oldhealthbarvertices[11],
+        oldhealthbarvertices[12], oldhealthbarvertices[13], oldhealthbarvertices[14],
+        ((1-player.getHealth()/player.getMaxHealth())*-1/unitToNormal), oldhealthbarvertices[16], oldhealthbarvertices[17]
+    };
+
+    healthbar.setUV(healthbaruv);
+    healthbar.setVertices(healthbarvertices);
 }
 
 void World::showTextBox(std::string text, bool show) {

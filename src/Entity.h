@@ -27,6 +27,8 @@ class Entity : public Tile {
 
         float getHealth();
 
+        float getMaxHealth();
+
         int getStr();
 
         int getDef();
@@ -37,6 +39,7 @@ class Entity : public Tile {
 
     private:
         float health = 10;
+        float maxHealth = 10;
         int str = 1;
         int def = 1;
         int intel = 1; 
