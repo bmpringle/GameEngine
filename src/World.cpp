@@ -6,59 +6,65 @@
 #include<math.h>
 
 void createCharacters(std::vector<Character>* characters) {
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "A"));
-    characters->push_back(Character({45, 52, 76, 52, 76, 10, 45, 52, 45, 10, 76, 10}, "B"));
-    characters->push_back(Character({82, 52, 117, 52, 117, 10, 82, 52, 82, 10, 117, 10}, "C"));
-    characters->push_back(Character({125, 52, 162, 52, 162, 10, 125, 52, 125, 10, 162, 10}, "D"));
-    characters->push_back(Character({170, 52,  198, 52,  198, 10, 170, 52, 170, 10,  198, 10}, "E"));
-    characters->push_back(Character({207, 52,  232, 52,  232, 10, 207, 52, 207, 10,  232, 10}, "F"));
-    characters->push_back(Character({238, 52,  275, 52,  275, 10, 238, 52, 238, 10,  275, 10}, "G"));
-    characters->push_back(Character({285, 52,  318, 52,  318, 10, 285, 52, 285, 10,  318, 10}, "H"));
-    characters->push_back(Character({329, 52,  336, 52,  336, 10, 329, 52, 329, 10,  336, 10}, "I"));
-    characters->push_back(Character({338, 64,  353, 64,  353, 10, 338, 64, 338, 10,  353, 10}, "J"));
-    characters->push_back(Character({363, 52,  397, 52,  397, 10, 363, 52, 363, 10,  397, 10}, "K"));
-    characters->push_back(Character({401, 52,  428, 52,  428, 10, 401, 52, 401, 10,  428, 10}, "L"));
-    characters->push_back(Character({433, 52,  473, 52,  473, 10, 433, 52, 433, 10,  473, 10}, "M"));
-    characters->push_back(Character({483, 52,  516, 52,  516, 10, 483, 52, 483, 10,  516, 10}, "N"));
-    characters->push_back(Character({524, 52,  564, 52,  564, 10, 524, 52, 524, 10,  564, 10}, "O"));
-    characters->push_back(Character({572, 52,  600, 52,  600, 10, 572, 52, 572, 10,  600, 10}, "P"));
-    characters->push_back(Character({605, 59,  645, 59,  645, 10, 605, 59, 605, 10,  645, 10}, "Q"));
-    characters->push_back(Character({653, 52,  687, 52,  687, 10, 653, 52, 653, 10,  687, 10}, "R"));
-    characters->push_back(Character({691, 52,  722, 52,  722, 10, 691, 52, 691, 10,  722, 10}, "S"));
-    characters->push_back(Character({724, 52,  761, 52,  761, 10, 724, 52, 724, 10,  761, 10}, "T"));
-    characters->push_back(Character({765, 52,  798, 52,  798, 10, 765, 52, 765, 10,  798, 10}, "U"));
-    characters->push_back(Character({802, 52,  841, 52,  841, 10, 802, 52, 802, 10,  841, 10}, "V"));
-    characters->push_back(Character({844, 52,  898, 52,  898, 10, 844, 52, 844, 10,  898, 10}, "W"));
-    characters->push_back(Character({902, 52,  937, 52,  937, 10, 902, 52, 902, 10,  937, 10}, "X"));
-    characters->push_back(Character({939, 52,  975, 52,  975, 10, 939, 52, 939, 10,  975, 10}, "Y"));
-    characters->push_back(Character({977, 52,  1011, 52,  1011, 10, 977, 52, 977, 10,  1011, 10}, "Z"));
+    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "A", false));
+    characters->push_back(Character({45, 52, 76, 52, 76, 10, 45, 52, 45, 10, 76, 10}, "B", false));
+    characters->push_back(Character({82, 52, 117, 52, 117, 10, 82, 52, 82, 10, 117, 10}, "C", false));
+    characters->push_back(Character({125, 52, 162, 52, 162, 10, 125, 52, 125, 10, 162, 10}, "D", false));
+    characters->push_back(Character({170, 52,  198, 52,  198, 10, 170, 52, 170, 10,  198, 10}, "E", false));
+    characters->push_back(Character({207, 52,  232, 52,  232, 10, 207, 52, 207, 10,  232, 10}, "F", false));
+    characters->push_back(Character({238, 52,  275, 52,  275, 10, 238, 52, 238, 10,  275, 10}, "G", false));
+    characters->push_back(Character({285, 52,  318, 52,  318, 10, 285, 52, 285, 10,  318, 10}, "H", false));
+    characters->push_back(Character({329, 52,  336, 52,  336, 10, 329, 52, 329, 10,  336, 10}, "I", false));
+    characters->push_back(Character({338, 64,  353, 64,  353, 10, 338, 64, 338, 10,  353, 10}, "J", false));
+    characters->push_back(Character({363, 52,  397, 52,  397, 10, 363, 52, 363, 10,  397, 10}, "K", false));
+    characters->push_back(Character({401, 52,  428, 52,  428, 10, 401, 52, 401, 10,  428, 10}, "L", false));
+    characters->push_back(Character({433, 52,  473, 52,  473, 10, 433, 52, 433, 10,  473, 10}, "M", false));
+    characters->push_back(Character({483, 52,  516, 52,  516, 10, 483, 52, 483, 10,  516, 10}, "N", false));
+    characters->push_back(Character({524, 52,  564, 52,  564, 10, 524, 52, 524, 10,  564, 10}, "O", false));
+    characters->push_back(Character({572, 52,  600, 52,  600, 10, 572, 52, 572, 10,  600, 10}, "P", false));
+    characters->push_back(Character({605, 59,  645, 59,  645, 10, 605, 59, 605, 10,  645, 10}, "Q", false));
+    characters->push_back(Character({653, 52,  687, 52,  687, 10, 653, 52, 653, 10,  687, 10}, "R", false));
+    characters->push_back(Character({691, 52,  722, 52,  722, 10, 691, 52, 691, 10,  722, 10}, "S", false));
+    characters->push_back(Character({724, 52,  761, 52,  761, 10, 724, 52, 724, 10,  761, 10}, "T", false));
+    characters->push_back(Character({765, 52,  798, 52,  798, 10, 765, 52, 765, 10,  798, 10}, "U", false));
+    characters->push_back(Character({802, 52,  841, 52,  841, 10, 802, 52, 802, 10,  841, 10}, "V", false));
+    characters->push_back(Character({844, 52,  898, 52,  898, 10, 844, 52, 844, 10,  898, 10}, "W", false));
+    characters->push_back(Character({902, 52,  937, 52,  937, 10, 902, 52, 902, 10,  937, 10}, "X", false));
+    characters->push_back(Character({939, 52,  975, 52,  975, 10, 939, 52, 939, 10,  975, 10}, "Y", false));
+    characters->push_back(Character({977, 52,  1011, 52,  1011, 10, 977, 52, 977, 10,  1011, 10}, "Z", false));
 
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "a"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "b"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "c"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "d"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "e"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "f"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "g"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "h"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "i"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "j"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "k"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "l"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "m"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "n"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "o"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "p"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "q"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "r"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "s"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "t"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "u"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "v"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "w"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "x"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "y"));
-    characters->push_back(Character({0, 52, 40, 52, 40, 10, 0, 52, 0, 10, 40, 10}, "z"));
+    characters->push_back(Character({3, 121, 30, 121, 30, 76, 3, 121, 3, 76, 30, 76}, "a", true));
+    characters->push_back(Character({41, 121, 70, 121, 70, 76, 41, 121, 41, 76, 70, 76}, "b", true));
+    characters->push_back(Character({76, 121, 102, 121, 102, 76, 76, 121, 76, 76, 102, 76}, "c", true));
+    characters->push_back(Character({108, 121, 136, 121, 136, 76, 108, 121, 108, 76, 136, 76}, "d", true));
+    characters->push_back(Character({145, 121, 175, 121, 175, 76, 145, 121, 145, 76, 175, 76}, "e", true));
+    characters->push_back(Character({176, 121, 200, 121, 200, 76, 176, 121, 176, 76, 200, 76}, "f", true));
+    characters->push_back(Character({201, 131, 229, 131, 229, 76, 201, 131, 201, 76, 229, 76}, "g", true));
+    characters->push_back(Character({240, 121, 266, 121, 266, 76, 240, 121, 240, 76, 266, 76}, "h", true));
+    characters->push_back(Character({269, 121, 292, 121, 292, 76, 269, 121, 269, 76, 292, 76}, "i", true));
+    characters->push_back(Character({283, 131, 308, 131, 308, 76, 283, 131, 283, 76, 308, 76}, "j", true));
+    characters->push_back(Character({309, 121, 337, 121, 337, 76, 309, 121, 309, 76, 337, 76}, "k", true));
+    characters->push_back(Character({338, 121, 358, 121, 358, 76, 338, 121, 338, 76, 358, 76}, "l", true));
+    characters->push_back(Character({358, 121, 406, 121, 406, 76, 358, 121, 358, 76, 406, 76}, "m", true));
+    characters->push_back(Character({416, 121, 442, 121, 442, 76, 416, 121, 416, 76, 442, 76}, "n", true));
+    characters->push_back(Character({451, 121, 480, 121, 480, 76, 451, 121, 451, 76, 480, 76}, "o", true));
+    characters->push_back(Character({488, 131, 517, 131, 517, 76, 488, 131, 488, 76, 517, 76}, "p", true));
+    characters->push_back(Character({523, 131, 551, 131, 551, 76, 523, 131, 523, 76, 551, 76}, "q", true));
+    characters->push_back(Character({562, 121, 580, 121, 580, 76, 562, 121, 562, 76, 580, 76}, "r", true));
+    characters->push_back(Character({584, 121, 608, 121, 608, 76, 584, 121, 584, 76, 608, 76}, "s", true));
+    characters->push_back(Character({611, 121, 632, 121, 632, 76, 611, 121, 611, 76, 632, 76}, "t", true));
+    characters->push_back(Character({638, 121, 665, 121, 665, 76, 638, 121, 638, 76, 665, 76}, "u", true));
+    characters->push_back(Character({672, 121, 703, 121, 703, 76, 672, 121, 672, 76, 703, 76}, "v", true));
+    characters->push_back(Character({707, 121, 749, 121, 749, 76, 707, 121, 707, 76, 749, 76}, "w", true));
+    characters->push_back(Character({753, 121, 784, 121, 784, 76, 753, 121, 753, 76, 784, 76}, "x", true));
+    characters->push_back(Character({787, 131, 818, 131, 818, 76, 787, 131, 787, 76, 818, 76}, "y", true));
+    characters->push_back(Character({821, 121, 847, 121, 847, 76, 821, 121, 821, 76, 847, 76}, "z", true));
+
+    characters->push_back(Character({850, 121, 870, 121, 870, 76, 850, 121, 850, 76, 870, 76}, ".", false));
+    characters->push_back(Character({870, 121, 880, 121, 880, 76, 870, 121, 870, 76, 880, 76}, "!", false));
+    characters->push_back(Character({890, 126, 910, 126, 910, 76, 890, 126, 890, 76, 910, 76}, ",", false));
+    characters->push_back(Character({913, 121, 935, 121, 935, 76, 913, 121, 913, 76, 935, 76}, "?", false));
+    characters->push_back(Character({940, 121, 970, 121, 970, 76, 940, 121, 940, 76, 970, 76}, "\"", false));
 }
 
 World::World() {
@@ -443,7 +449,6 @@ void World::showTextBox(std::string text, bool show) {
                 int index = lettersToNumbers.at(character);
                 Character t = characters[index];
                 t.setPos(textBoxBeginningX+i, textBoxBeginningY-j, -5);
-
                 textbox.addAttachment(t);
                 if(i >= textBoxLength-size) {
                     i = -spaceSize;
