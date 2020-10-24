@@ -9,21 +9,37 @@
 import os
 
 DBG = int(ARGUMENTS.get('DBG', 0))
-CLANG = int(ARGUMENTS.get('CLANG', 1))
 
 env = Environment()
 
-CXX='clang++' if CLANG==1 else "g++"
 if env['PLATFORM'] == 'darwin': #macos
+    CLANG = int(ARGUMENTS.get('CLANG', 1))
+    CXX='clang++' if CLANG==1 else "g++"
     GLFW_DIR='/usr/local/Cellar/glfw/3.3.2'
     GLEW_DIR='/usr/local/Cellar/glew/2.2.0'
     LIBS=['GLEW','GLFW','pthread']
     LINK='{} -framework OpenGL -framework GLUT'.format(CXX)
 elif env['PLATFORM'] == 'posix': #linux
+    CLANG = int(ARGUMENTS.get('CLANG', 1))
+    CXX='clang++' if CLANG==1 else "g++"
     GLFW_DIR='/usr/local' # must 'make install' GLFW 
     GLEW_DIR='/usr/'
     LINK='{}'.format(CXX)
     LIBS=['GLEW','glfw3','pthread', 'GL', 'X11', 'Xrandr', 'Xi', 'GLU', 'dl']
+elif env['PLATFORM'] == 'win32': #Min-GW-64, TODO add MS compiler support
+    CLANG = int(ARGUMENTS.get('CLANG', 0)) # 
+    CXX='clang++' if CLANG==1 else "g++"
+    path = ['C:\\Program Files\\mingw-w64\\x86_64-8.1.0-win32-seh-rt_v6-rev0\\mingw64\\bin']
+    temp = 'C:\\Temp'
+    # note:
+    # download glfw-3.3.2.bin.WIN64 and glew-2.1.0 (TODO either check in or create automatic process to install)
+    # renamed glfw-3.3.2.bin.WIN64/lib-*minwg* -> glfw-3.3.2.bin.WIN64/lib
+    env = Environment(ENV={'PATH': path, 'TEMP': temp}, 
+                      tools=['mingw'])
+    GLFW_DIR=os.sep.join(['.','glfw-3.3.2.bin.WIN64'])
+    GLEW_DIR=os.sep.join(['.','glew-2.1.0'])
+    LINK='{}'.format(CXX)
+    LIBS=['glew32s','glfw3', 'glu32', 'gdi32', 'opengl32']
 else:
     print("Error, unsupported platform->", env['PLATFORM'])
     exit()
@@ -36,7 +52,7 @@ GLEW_LIB=os.sep.join([GLEW_DIR,'lib'])
 BLD = 'dbg' if DBG == 1 else 'rel'
 OPT = 0 if DBG == 1 else 3
 
-CCFLAGS='-O{} -I {} -I {} -g -std=c++2a'.format(OPT, GLFW_INCLUDE, GLEW_INCLUDE)
+CCFLAGS='-static -O{} -I {} -I {} -g -std=c++2a -DGLEW_STATIC'.format(OPT, GLFW_INCLUDE, GLEW_INCLUDE)
 
 VariantDir(os.sep.join(['obj', BLD]), "src", duplicate=0)
 tst = env.Program(os.sep.join(['bin', BLD, 'tstGame']),

@@ -3,8 +3,6 @@
 #include<iostream>
 #include<vector>
 
-#define GLEW_STATIC
-
 void _glfwInit() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
