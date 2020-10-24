@@ -499,11 +499,11 @@ void World::update() {
 
     std::vector<float> healthbarvertices = {
         oldhealthbarvertices[0], oldhealthbarvertices[1], oldhealthbarvertices[2], 
-        ((1-player.getHealth()/player.getMaxHealth())*-1/unitToNormal), oldhealthbarvertices[4], oldhealthbarvertices[5], 
-        ((1-player.getHealth()/player.getMaxHealth())*-1/unitToNormal), oldhealthbarvertices[7], oldhealthbarvertices[8],
+        -1/unitToNormal+(player.getHealth()/player.getMaxHealth())*static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)+1/unitToNormal), oldhealthbarvertices[4], oldhealthbarvertices[5], 
+        -1/unitToNormal+(player.getHealth()/player.getMaxHealth())*static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)+1/unitToNormal), oldhealthbarvertices[7], oldhealthbarvertices[8],
         oldhealthbarvertices[9], oldhealthbarvertices[10], oldhealthbarvertices[11],
         oldhealthbarvertices[12], oldhealthbarvertices[13], oldhealthbarvertices[14],
-        ((1-player.getHealth()/player.getMaxHealth())*-1/unitToNormal), oldhealthbarvertices[16], oldhealthbarvertices[17]
+        -1/unitToNormal+(player.getHealth()/player.getMaxHealth())*static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)+1/unitToNormal), oldhealthbarvertices[16], oldhealthbarvertices[17]
     };
 
     healthbar.setUV(healthbaruv);

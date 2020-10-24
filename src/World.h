@@ -53,8 +53,8 @@ class World {
         float yMax = 0;
         float textOffset = 0;
         
-        Tile emptyhealthbar = Tile(0, 0, "emptyhealthbar", {-1/unitToNormal, 1/unitToNormal, -4, 0, 1/unitToNormal, -4, 0,  (float)1/(unitToNormal)*(float)0.8, -4, -1/unitToNormal, 1/unitToNormal, -4, -1/unitToNormal,  (float)1/(unitToNormal)*(float)0.8, -4, 0,  (float)1/(unitToNormal)*(float)0.8, -4});
-        Tile healthbar = Tile(0, 0, "healthbar", {-1/unitToNormal, 1/unitToNormal, -5, 0, 1/unitToNormal, -5, 0,  (float)1/(unitToNormal)*(float)0.8, -5, -1/unitToNormal, 1/unitToNormal, -5, -1/unitToNormal,  (float)1/(unitToNormal)*(float)0.8, -5, 0,  (float)1/(unitToNormal)*(float)0.8, -5});
+        Tile emptyhealthbar = Tile(0, 0, "emptyhealthbar", {-1/unitToNormal, 1/unitToNormal, -4, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)), 1/unitToNormal, -4, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)),  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -4, -1/unitToNormal, 1/unitToNormal, -4, -1/unitToNormal,  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -4, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)),  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -4});
+        Tile healthbar = Tile(0, 0, "healthbar", {-1/unitToNormal, 1/unitToNormal, -5, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)), 1/unitToNormal, -5, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)),  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -5, -1/unitToNormal, 1/unitToNormal, -5, -1/unitToNormal,  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -5, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)),  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -5});
 
         bool showTextbox = false;
         std::vector<Character> characters = std::vector<Character>();
