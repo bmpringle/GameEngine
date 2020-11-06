@@ -6,6 +6,7 @@
 #include<chrono>
 #include"Character.h"
 #include<map>
+#include"HUD.h"
 
 class World {
     public:   
@@ -47,14 +48,13 @@ class World {
         float unitToNormal = 1.0/5.0;
         Entity player = Entity(0, 0);
 
+        HUD hud;
+
         Tile textbox = Tile(0, 0, "textbox", {-1/unitToNormal, -1/unitToNormal, -4, 1/unitToNormal, -1/unitToNormal, -4, 1/unitToNormal, -1/(unitToNormal*2), -4, -1/unitToNormal, -1/unitToNormal, -4, -1/unitToNormal, -1/(unitToNormal*2), -4, 1/unitToNormal, -1/(unitToNormal*2), -4});
         std::string textDisplayed = "";
         float yMin = 0;
         float yMax = 0;
         float textOffset = 0;
-        
-        Tile emptyhealthbar = Tile(0, 0, "emptyhealthbar", {-1/unitToNormal, 1/unitToNormal, -4, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)), 1/unitToNormal, -4, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)),  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -4, -1/unitToNormal, 1/unitToNormal, -4, -1/unitToNormal,  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -4, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)),  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -4});
-        Tile healthbar = Tile(0, 0, "healthbar", {-1/unitToNormal, 1/unitToNormal, -5, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)), 1/unitToNormal, -5, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)),  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -5, -1/unitToNormal, 1/unitToNormal, -5, -1/unitToNormal,  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -5, static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)),  static_cast<float>(1/(unitToNormal)-((float)1/(unitToNormal)*(float)0.2)/2.0), -5});
 
         bool showTextbox = false;
         std::vector<Character> characters = std::vector<Character>();

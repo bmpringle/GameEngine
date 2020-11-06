@@ -3,7 +3,6 @@
 #include<iostream>
 #include"Init.h"
 #include"World.h"
-#include"Tiles.h"
 #include"Entity.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -83,8 +82,6 @@ int main(int argc, char** argv) {
 
     int program = shaderInit();
     int texprogram = texShaderInit();
-
-    Tiles::tileInit();
 
     World world = World();
 

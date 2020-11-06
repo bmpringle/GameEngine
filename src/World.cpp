@@ -2,7 +2,6 @@
 #include<fstream>
 #include<string.h>
 #include<sstream>
-#include"Tiles.h"
 #include<math.h>
 
 void createCharacters(std::vector<Character>* characters) {
@@ -67,7 +66,7 @@ void createCharacters(std::vector<Character>* characters) {
     characters->push_back(Character({940, 121, 970, 121, 970, 76, 940, 121, 940, 76, 970, 76}, "\"", false));
 }
 
-World::World() {
+World::World() : hud(0.0f, this) {
     std::vector<float> player_vertices = {
         0.4, 0.15, 0,
         0.6, 0.15, 0,
@@ -77,15 +76,10 @@ World::World() {
         0.6, 0.85, 0
     };
 
+    hud = HUD(unitToNormal, this);
     player = Entity(0, 0, "player", player_vertices);
     player.loadTexture("player.png");
     player.world = this;
-
-    emptyhealthbar.loadTexture("emptyhealthbar.png");
-    healthbar.loadTexture("healthbar.png");
-    
-    emptyhealthbar.world = this;
-    healthbar.world = this;
 
     createCharacters(&characters);
 
@@ -154,19 +148,13 @@ void World::render(int program, int texprogram) {
     }else {
         player.render(program, unitToNormal);
     }
+    
+    hud.render(program, texprogram);
+
     if(showTextbox) {
         renderTextBox(program, texprogram);
     }
-    if(emptyhealthbar.hasTexture) {
-        emptyhealthbar.render(texprogram, unitToNormal);
-    }else {
-        emptyhealthbar.render(program, unitToNormal);
-    }
-    if(healthbar.hasTexture) {
-        healthbar.render(texprogram, unitToNormal);
-    }else {
-        healthbar.render(program, unitToNormal);
-    }
+
     player.setPos(x, y);
 }
 
@@ -486,28 +474,7 @@ void World::update() {
         entities[i].update();
     }
     player.update();
-    std::vector<float> healthbaruv = {
-        0, 0,
-        player.getHealth()/player.getMaxHealth(), 0,
-        player.getHealth()/player.getMaxHealth(), 1,
-        0, 0,
-        0, 1,
-        player.getHealth()/player.getMaxHealth(), 1  
-    };
-
-    std::vector<float> oldhealthbarvertices = healthbar.getVertices();
-
-    std::vector<float> healthbarvertices = {
-        oldhealthbarvertices[0], oldhealthbarvertices[1], oldhealthbarvertices[2], 
-        -1/unitToNormal+(player.getHealth()/player.getMaxHealth())*static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)+1/unitToNormal), oldhealthbarvertices[4], oldhealthbarvertices[5], 
-        -1/unitToNormal+(player.getHealth()/player.getMaxHealth())*static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)+1/unitToNormal), oldhealthbarvertices[7], oldhealthbarvertices[8],
-        oldhealthbarvertices[9], oldhealthbarvertices[10], oldhealthbarvertices[11],
-        oldhealthbarvertices[12], oldhealthbarvertices[13], oldhealthbarvertices[14],
-        -1/unitToNormal+(player.getHealth()/player.getMaxHealth())*static_cast<float>(-1/unitToNormal+((1/unitToNormal)/2.0)+1/unitToNormal), oldhealthbarvertices[16], oldhealthbarvertices[17]
-    };
-
-    healthbar.setUV(healthbaruv);
-    healthbar.setVertices(healthbarvertices);
+    hud.update(player);
 }
 
 void World::showTextBox(std::string text, bool show) {
